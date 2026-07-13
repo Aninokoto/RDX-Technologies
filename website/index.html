@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        // Signed-in users treat the Dashboard as "home" — bounce them there
+        // before the rest of the page has a chance to paint. Signing out
+        // clears rdx_session, so this stops firing once someone logs out.
+        (function () {
+            try {
+                if (localStorage.getItem("rdx_session")) {
+                    window.location.replace("dashboard.html");
+                }
+            } catch (e) { /* localStorage unavailable — just show the homepage */ }
+        })();
+    </script>
+    <title>RDX Technologies</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+   <nav class="main-nav">
+        <div></div>
+        <ul class="nav-center-pill" id="navlinks">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#story">Our Story</a></li>
+            <li><a href="services.html">Services</a></li>  
+            <li><a href="store.html">Store</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div style="display: flex; gap: 12px; align-items: center;">
+         <a href="#" class="nav-signin" id="navProfileBtn" onclick="handleProfileNavClick(event)">Sign In</a>
+        </div>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="hero-glow"></div>
+        <div class="hero-content">
+            <div class="unlock-badge"><div class="badge-dot"></div>Tech Repair Specialists</div>
+            <h1>RDX<br/><em>Technologies</em></h1>
+            <p class="mission">We rescue discarded tech, breathe new life into devices, and turn what was once waste into valuable products.</p>
+            <div class="cta-group">
+                <a href="services.html" class="btn-secondary" style="text-decoration:none; display:inline-block;">Book a Repair</a>
+                <a href="#story" class="btn-primary" style="text-decoration:none; display:inline-block;">Discover More</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Signature Element: Always-visible looping intake ticker -->
+    <div class="intake-ticker">
+        <div class="intake-track">
+            <span>iPhone</span><span class="dot">•</span>
+            <span>Samsung Galaxy</span><span class="dot">•</span>
+            <span>MacBook</span><span class="dot">•</span>
+            <span>GPU</span><span class="dot">•</span>
+            <span>OnePlus</span><span class="dot">•</span>
+            <span>Battery Swaps</span><span class="dot">•</span>
+            <span>Water Damage</span><span class="dot">•</span>
+            <span>iPad</span><span class="dot">•</span>
+            <span>Google Pixel</span><span class="dot">•</span>
+            <span>Gaming Consoles</span><span class="dot">•</span>
+            <span>Motherboards</span><span class="dot">•</span>
+            <span>Screen Replacements</span><span class="dot">•</span>
+            <span>Charging Ports</span><span class="dot">•</span>
+            <span>Data Recovery</span><span class="dot">•</span>
+            <span>Laptops</span><span class="dot">•</span>
+            <span>Smartwatches</span><span class="dot">•</span>
+            <span>iPhone</span><span class="dot">•</span>
+            <span>Samsung Galaxy</span><span class="dot">•</span>
+            <span>MacBook</span><span class="dot">•</span>
+            <span>GPU</span><span class="dot">•</span>
+            <span>OnePlus</span><span class="dot">•</span>
+            <span>Battery Swaps</span><span class="dot">•</span>
+            <span>Water Damage</span><span class="dot">•</span>
+            <span>iPad</span><span class="dot">•</span>
+            <span>Google Pixel</span><span class="dot">•</span>
+            <span>Gaming Consoles</span><span class="dot">•</span>
+            <span>Motherboards</span><span class="dot">•</span>
+            <span>Screen Replacements</span><span class="dot">•</span>
+            <span>Charging Ports</span><span class="dot">•</span>
+            <span>Data Recovery</span><span class="dot">•</span>
+            <span>Laptops</span><span class="dot">•</span>
+            <span>Smartwatches</span><span class="dot">•</span>
+        </div>
+    </div>
+
+    <!-- Diagnostics-style stats strip — visible immediately, no scroll needed -->
+    <section class="diagnostics-strip">
+        <div class="diagnostic-stat">
+            <div class="diagnostic-dot"></div>
+            <div class="diagnostic-value">2,300+</div>
+            <div class="diagnostic-label">Devices Revived</div>
+        </div>
+        <div class="diagnostic-stat">
+            <div class="diagnostic-dot"></div>
+            <div class="diagnostic-value">9.6T</div>
+            <div class="diagnostic-label">E-Waste Diverted</div>
+        </div>
+        <div class="diagnostic-stat">
+            <div class="diagnostic-dot"></div>
+            <div class="diagnostic-value">22H</div>
+            <div class="diagnostic-label">Avg. Diagnostic Time</div>
+        </div>
+    </section>
+
+    <!-- Repair Log: redesigned story timeline -->
+    <section class="repair-log" id="story">
+        <div class="repair-log-header reveal">
+            <span class="plan-tag">Repair Log</span>
+            <h2 class="repair-log-heading">How this started.</h2>
+        </div>
+        <div class="repair-log-grid">
+            <div class="repair-ticket reveal">
+                <div class="ticket-number">Ticket No. 01</div>
+                <p>From a young age, I was always <em>fascinated by technology.</em></p>
+            </div>
+            <div class="repair-ticket reveal">
+                <div class="ticket-number">Ticket No. 02</div>
+                <p>That curiosity grew into a genuine passion for <em>how phones worked.</em></p>
+            </div>
+            <div class="repair-ticket reveal">
+                <div class="ticket-number">Ticket No. 03</div>
+                <p>What started as curiosity turned into skill — <em>a hobby became a purpose.</em></p>
+            </div>
+            <div class="repair-ticket reveal">
+                <div class="ticket-number">Ticket No. 04</div>
+                <p>Giving technology a second life — <em>helping others, moving forward.</em></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process: How a repair actually runs -->
+    <section class="process-section reveal">
+        <div class="process-header">
+            <span class="plan-tag">The Process</span>
+            <h2 class="repair-log-heading">From diagnosis to delivery.</h2>
+        </div>
+        <div class="process-steps">
+            <div class="process-step">
+                <div class="process-node">01</div>
+                <h4>Diagnose</h4>
+                <p>A full hardware and software scan flags exactly what's failing before we touch a screw.</p>
+            </div>
+            <div class="process-connector"></div>
+            <div class="process-step">
+                <div class="process-node">02</div>
+                <h4>Repair</h4>
+                <p>OEM-quality parts, swapped in by hand. No shortcuts, no guesswork.</p>
+            </div>
+            <div class="process-connector"></div>
+            <div class="process-step">
+                <div class="process-node">03</div>
+                <h4>Test</h4>
+                <p>Every repair is re-run through the same diagnostic before it ever leaves the bench.</p>
+            </div>
+            <div class="process-connector"></div>
+            <div class="process-step">
+                <div class="process-node">04</div>
+                <h4>Return</h4>
+                <p>Your device comes back working, tracked from ticket to your hands.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Closing CTA -->
+    <section class="cta-banner reveal">
+        <div class="hero-glow" style="right: 40%; top: -20%;"></div>
+        <span class="plan-tag" style="margin: 0 auto 16px;">Ready When You Are</span>
+        <h2 class="cta-banner-heading">Give your device<br/>a second life.</h2>
+        <p class="cta-banner-text">Browse repair-ready hardware or start a diagnostic — most devices are back in your hands within 48 hours.</p>
+        <div class="cta-group" style="justify-content: center;">
+            <a href="store.html" class="btn-primary" style="text-decoration:none; display:inline-block;">Browse the Store</a>
+            <a href="contact.html" class="btn-secondary" style="text-decoration:none; display:inline-block;">Start a Repair Ticket</a>
+        </div>
+    </section>
+
+    <footer class="trademark">
+        <div class="tm-left"><div class="tm-dot"></div>RDX Technologies</div>
+        <div class="tm-center">© 2025 RDX Technologies™ · All rights reserved.</div>
+        <div class="tm-right">Designed with precision.</div>
+    </footer>
+
+    <!-- AI Assistant Widget -->
+    <div class="chat-widget">
+        <button class="chat-fab" id="chatFab" onclick="toggleChatWidget()" aria-label="Open chat assistant">
+            <svg class="chat-fab-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20H7L4 22V12Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="8.5" cy="12" r="1" fill="currentColor"/>
+                <circle cx="12" cy="12" r="1" fill="currentColor"/>
+                <circle cx="15.5" cy="12" r="1" fill="currentColor"/>
+            </svg>
+        </button>
+        <div class="chat-panel" id="chatPanel">
+            <div class="chat-panel-header">
+                <div class="chat-header-info">
+                    <div class="chat-header-avatar">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20H7L4 22V12Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4>RDX Assistant</h4>
+                        <span class="chat-status"><span class="chat-status-dot"></span>Products, orders &amp; support</span>
+                    </div>
+                </div>
+                <button class="chat-close-btn" onclick="toggleChatWidget()" aria-label="Close chat">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="chat-msg chat-msg-bot">Hey! I can explain any product in plain English, or help with orders, repairs, and general questions. What do you need?</div>
+            </div>
+            <div class="chat-input-row">
+                <input type="text" id="chatInput" placeholder="Ask me anything..." onkeydown="if(event.key==='Enter') sendChatMessage()">
+                <button class="chat-send-btn" onclick="sendChatMessage()" aria-label="Send message">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 12L20 4L14 20L11 13L4 12Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+<!-- Firebase SDK Libraries (Easiest Cloud Setup) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script> <!-- ADD THIS LINE -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="/Js_on/script.js"></script>
+</body>
+</html>

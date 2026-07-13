@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | RDX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .register-container {
+            min-height: calc(100vh - 200px);
+            padding: 140px 24px 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .register-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            width: 100%;
+            max-width: 480px;
+            border-radius: 28px;
+            padding: 50px;
+            text-align: center;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="main-nav">
+        <div></div>
+        <ul class="nav-center-pill">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#story">Our Story</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="store.html">Store</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <a href="#" class="nav-signin nav-cart-btn">Cart (<span id="cart-count">0</span>)</a>
+            <a href="#" class="nav-signin" id="navProfileBtn" onclick="handleProfileNavClick(event)">Sign In</a>
+        </div>
+    </nav>
+
+    <div class="register-container">
+        <div class="hero-glow"></div>
+        <div class="register-card reveal">
+            <h2 style="font-family:'Syne', sans-serif; font-size:2.2rem; margin-bottom:8px;">Initialize Profile</h2>
+            <p style="color:rgba(255,255,255,0.4); font-size:0.88rem; margin-bottom:30px;">Initialize your RDX profile instantly with your Google account credentials.</p>
+            
+            <button class="btn-checkout-submit" onclick="handleGoogleSignIn()" style="background:#00e5b4; color:#000; display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.24 10.285V13.4h6.887C18.2 15.614 15.645 18 12.24 18c-3.86 0-7-3.14-7-7s3.14-7 7-7c1.7 0 3.3.6 4.5 1.7l2.4-2.4C17.3 1.5 14.9 1 12.24 1 6.58 1 2 5.58 2 11.24s4.58 10.24 10.24 10.24c5.79 0 10.24-4.07 10.24-10.24 0-.69-.06-1.35-.18-1.95H12.24z"/></svg>
+                Sign In with Google
+            </button>
+        </div>
+    </div>
+
+    <footer class="trademark">
+        <div class="tm-left"><div class="tm-dot"></div>RDX Technologies</div>
+        <div class="tm-center">© 2025 RDX Technologies™ · All rights reserved.</div>
+        <div class="tm-right">Designed with precision.</div>
+    </footer>
+
+    <!-- Firebase SDK Libraries -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Your main scripts -->
+  <script src="/Js_on/script.js"></script>
+</body>
+</html>

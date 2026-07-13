@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Checkout | RDX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .checkout-page-container {
+            min-height: calc(100vh - 200px);
+            padding: 140px 24px 80px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
+        .checkout-card-layout {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            width: 100%;
+            max-width: 1100px;
+            border-radius: 28px;
+            padding: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="main-nav">
+        <div></div>
+        <ul class="nav-center-pill">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#story">Our Story</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="store.html">Store</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <a href="#" class="nav-signin nav-cart-btn">Cart (<span id="cart-count">0</span>)</a>
+            <a href="#" class="nav-signin" id="navProfileBtn" onclick="handleProfileNavClick(event)">Sign In</a>
+        </div>
+    </nav>
+
+    <div class="checkout-page-container">
+        <div class="hero-glow"></div>
+
+        <div class="checkout-card-layout reveal">
+            <div class="checkout-shell">
+
+                <!-- Step Progress Indicator -->
+                <div class="checkout-steps-nav" id="checkoutStepsNav">
+                    <div class="step-node active" data-step="1">
+                        <div class="step-circle">1</div>
+                        <span class="step-label">Shipping</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step-node" data-step="2">
+                        <div class="step-circle">2</div>
+                        <span class="step-label">Payment</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step-node" data-step="3">
+                        <div class="step-circle">3</div>
+                        <span class="step-label">Review</span>
+                    </div>
+                </div>
+
+                <!-- Empty Cart State -->
+                <div id="checkoutEmptyState" class="checkout-empty-state" style="display:none;">
+                    <span class="plan-tag">Cart Empty</span>
+                    <h2 style="font-family:'Syne', sans-serif; font-size:1.8rem; margin: 10px 0;">Your cart is empty</h2>
+                    <p style="color:rgba(255,255,255,0.45); max-width: 420px; margin: 0 auto 25px;">Please browse our products or service plans first to proceed to checkout.</p>
+                    <button class="btn-primary" onclick="window.location.href='store.html'" style="margin: 0 auto; width: auto; padding: 12px 28px;">Browse Store</button>
+                </div>
+
+                <!-- Active Checkout View -->
+                <div id="checkoutMainFlow" class="checkout-layout">
+
+                    <div class="checkout-main-col">
+                        <form id="checkoutForm" class="checkout-form" onsubmit="return false;">
+
+                            <!-- STEP 1: SHIPPING -->
+                            <div class="checkout-step-panel active" id="stepPanel1">
+                                <h4 class="step-panel-heading">Shipping Address</h4>
+                                <div class="checkout-field">
+                                    <label for="shipName">Full Name</label>
+                                    <input type="text" id="shipName" required placeholder="John Doe">
+                                </div>
+                                <div class="checkout-field-row">
+                                    <div class="checkout-field">
+                                        <label for="shipAddress">Address</label>
+                                        <input type="text" id="shipAddress" required placeholder="123 Main St">
+                                    </div>
+                                    <div class="checkout-field">
+                                        <label for="shipApt">Apt / Suite (optional)</label>
+                                        <input type="text" id="shipApt" placeholder="Apt 4B">
+                                    </div>
+                                </div>
+                                <div class="checkout-field-row three">
+                                    <div class="checkout-field">
+                                        <label for="shipCity">City</label>
+                                        <input type="text" id="shipCity" required placeholder="San Francisco">
+                                    </div>
+                                    <div class="checkout-field">
+                                        <label for="shipState">State</label>
+                                        <input type="text" id="shipState" required placeholder="CA">
+                                    </div>
+                                    <div class="checkout-field">
+                                        <label for="shipZip">ZIP Code</label>
+                                        <input type="text" id="shipZip" required placeholder="94107">
+                                    </div>
+                                </div>
+                                <div class="checkout-field">
+                                    <label for="shipPhone">Phone Number</label>
+                                    <input type="tel" id="shipPhone" required placeholder="(555) 123-4567">
+                                </div>
+
+                                <div class="checkout-step-actions">
+                                    <button type="button" class="btn-checkout-submit" onclick="goToStep(2)">Continue to Payment</button>
+                                </div>
+                            </div>
+
+                            <!-- STEP 2: PAYMENT -->
+                            <div class="checkout-step-panel" id="stepPanel2">
+                                <h4 class="step-panel-heading">Payment Method</h4>
+                                <div class="checkout-field">
+                                    <label for="checkoutEmail">Email Address</label>
+                                    <input type="email" id="checkoutEmail" required placeholder="john@example.com">
+                                </div>
+                                <div class="checkout-field">
+                                    <label for="checkoutName">Name on Card</label>
+                                    <input type="text" id="checkoutName" required placeholder="John Doe">
+                                </div>
+                                <div class="checkout-field">
+                                    <label for="checkoutCard">Mock Card Number</label>
+                                    <input type="text" id="checkoutCard" required placeholder="4111 2222 3333 4444" pattern="[0-9\s]{13,19}">
+                                </div>
+                                <div class="checkout-field-row">
+                                    <div class="checkout-field">
+                                        <label for="checkoutExpiry">Expiry Date</label>
+                                        <input type="text" id="checkoutExpiry" required placeholder="MM/YY">
+                                    </div>
+                                    <div class="checkout-field">
+                                        <label for="checkoutCVV">CVV</label>
+                                        <input type="text" id="checkoutCVV" required placeholder="123" maxlength="4">
+                                    </div>
+                                </div>
+
+                                <div class="checkout-step-actions split">
+                                    <button type="button" class="btn-checkout-back" onclick="goToStep(1)">Back</button>
+                                    <button type="button" class="btn-checkout-submit" onclick="goToStep(3)">Review Order</button>
+                                </div>
+                            </div>
+
+                            <!-- STEP 3: REVIEW -->
+                            <div class="checkout-step-panel" id="stepPanel3">
+                                <h4 class="step-panel-heading">Review &amp; Place Order</h4>
+
+                                <div class="review-block">
+                                    <div class="review-block-header">
+                                        <span>Shipping To</span>
+                                        <button type="button" class="review-edit-link" onclick="goToStep(1)">Edit</button>
+                                    </div>
+                                    <p id="reviewShippingText" class="review-block-text">—</p>
+                                </div>
+
+                                <div class="review-block">
+                                    <div class="review-block-header">
+                                        <span>Payment Method</span>
+                                        <button type="button" class="review-edit-link" onclick="goToStep(2)">Edit</button>
+                                    </div>
+                                    <p id="reviewPaymentText" class="review-block-text">—</p>
+                                </div>
+
+                                <div class="checkout-step-actions split">
+                                    <button type="button" class="btn-checkout-back" onclick="goToStep(2)">Back</button>
+                                    <button type="button" class="btn-checkout-submit" id="checkoutSubmitBtn" onclick="handleCheckoutSubmit()">Place Order</button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+
+                    <!-- STICKY SIDEBAR -->
+                    <aside class="checkout-sidebar">
+                        <div class="checkout-sidebar-card">
+                            <span class="plan-tag">Order Summary</span>
+                            <div id="checkoutSidebarItems" class="checkout-sidebar-items"></div>
+                            <div class="checkout-sidebar-totals">
+                                <div class="checkout-total-row"><span>Subtotal</span><span id="checkoutSubtotalVal">$0.00</span></div>
+                                <div class="checkout-total-row"><span>Shipping</span><span class="free-tag">FREE</span></div>
+                                <div class="checkout-total-row grand"><span>Total</span><span id="checkoutGrandTotalVal">$0.00</span></div>
+                            </div>
+                        </div>
+                    </aside>
+
+                </div>
+
+                <!-- Success Confirmation Screen -->
+                <div id="checkoutSuccessFlow" style="display: none; text-align: center; padding: 40px 0;">
+                    <div class="stock-badge" style="margin: 0 auto 20px;">
+                        <div class="stock-dot"></div>
+                        <span>Transaction Authenticated</span>
+                    </div>
+                    <h2 id="successTitle" style="font-family: 'Syne', sans-serif; font-size: 2.5rem; margin-bottom: 10px;">Order Complete!</h2>
+                    <p id="successMessage" style="color: rgba(255,255,255,0.5); max-width: 460px; margin: 0 auto 30px;">Your transaction went through successfully. You can manage your profile settings in your Account Dashboard.</p>
+                    <button class="btn-primary" onclick="window.location.href='settings.html'" style="margin: 0 auto; width: auto; padding: 12px 28px;">Go to Dashboard</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <footer class="trademark">
+        <div class="tm-left"><div class="tm-dot"></div>RDX Technologies</div>
+        <div class="tm-center">© 2025 RDX Technologies™ · All rights reserved.</div>
+        <div class="tm-right">Designed with precision.</div>
+    </footer>
+
+
+    <!-- Firebase SDK Libraries (Easiest Cloud Setup) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script> <!-- ADD THIS LINE -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="/Js_on/script.js"></script>
+    <script>
+        // Formally trigger checkout render immediately on page load
+        document.addEventListener("DOMContentLoaded", () => {
+            renderCheckoutPage();
+        });
+    </script>
+    <!-- AI Assistant Widget -->
+    <div class="chat-widget">
+        <button class="chat-fab" id="chatFab" onclick="toggleChatWidget()" aria-label="Open chat assistant">
+            <svg class="chat-fab-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20H7L4 22V12Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="8.5" cy="12" r="1" fill="currentColor"/>
+                <circle cx="12" cy="12" r="1" fill="currentColor"/>
+                <circle cx="15.5" cy="12" r="1" fill="currentColor"/>
+            </svg>
+        </button>
+        <div class="chat-panel" id="chatPanel">
+            <div class="chat-panel-header">
+                <div class="chat-header-info">
+                    <div class="chat-header-avatar">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20H7L4 22V12Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4>RDX Assistant</h4>
+                        <span class="chat-status"><span class="chat-status-dot"></span>Products, orders &amp; support</span>
+                    </div>
+                </div>
+                <button class="chat-close-btn" onclick="toggleChatWidget()" aria-label="Close chat">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="chat-msg chat-msg-bot">Hey! I can explain any product in plain English, or help with orders, repairs, and general questions. What do you need?</div>
+            </div>
+            <div class="chat-input-row">
+                <input type="text" id="chatInput" placeholder="Ask me anything..." onkeydown="if(event.key==='Enter') sendChatMessage()">
+                <button class="chat-send-btn" onclick="sendChatMessage()" aria-label="Send message">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 12L20 4L14 20L11 13L4 12Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
