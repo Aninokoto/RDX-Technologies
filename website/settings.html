@@ -6,6 +6,7 @@
     <title>Account Dashboard | RDX</title>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="/images_copy/logo.svg">
     <style>
         .settings-container {
             min-height: calc(100vh - 200px);
@@ -244,11 +245,15 @@
     </div>
 
     
-    <!-- Firebase SDK Libraries (Easiest Cloud Setup) -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script> <!-- ADD THIS LINE -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script src="/Js_on/script.js"></script>
+   <!-- Firebase SDK Libraries (Ensures database connection is online on this page) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Your main script -->
+    <script src="/Js_on/script.js"></script>
+</body>
+</html>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             renderSettingsPage();

@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Services | RDX Technologies</title>
     <link rel="stylesheet" href="style.css">
+        <!-- This line loads your logo.svg in your browser tab, but keeps it hidden on the page -->
+    <link rel="icon" type="image/svg+xml" href="/images_copy/logo.svg">
+</head>
 </head>
 <body>
   
@@ -126,10 +129,14 @@
         </div>
     </div>
 
-    <!-- Firebase SDK Libraries (Easiest Cloud Setup) -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script> <!-- ADD THIS LINE -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script src="/Js_on/script.js"></script>
+  <!-- Firebase SDK Libraries (Ensures database connection is online on this page) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Your main script -->
+    <script src="/Js_on/script.js"></script>
+</body>
+</html>
 </body>
 </html>

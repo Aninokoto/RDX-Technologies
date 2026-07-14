@@ -504,16 +504,23 @@ function logUserOut() {
     }
     window.location.href = "index.html";
 }
-
 /* ============================================================
    7. INITIALIZATION AND MODAL DRAWERS INJECTION
    ============================================================ */
 async function initializeCloudDataSync() {
     const session = localStorage.getItem("rdx_session");
     if (session) {
+        // 1. Await the cloud database download
         localCartState = await fetchCartFromDatabase();
+        
+        // 2. Update your drawer interface
         updateCartUI();
         checkActiveSubscriptionButtons();
+
+        // 3. If we are on the checkout page, rebuild the layout once data is loaded!
+        if (window.location.pathname.includes("checkout.html")) {
+            renderCheckoutPage();
+        }
     }
 }
 
@@ -635,7 +642,6 @@ document.addEventListener("DOMContentLoaded", () => {
         bookDate.min = new Date().toISOString().split("T")[0];
     }
 });
-
 /* ============================================================
    8. DYNAMIC STORE FILTER CONTROLS
    ============================================================ */

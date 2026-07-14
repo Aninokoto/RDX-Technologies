@@ -13,18 +13,18 @@ const cors = require("cors");
 const path = require("path");
 
 const app = express();
-
 app.use(cors({ origin: "http://localhost:3000" }));
 app.use(express.json());
 
 // 1. Serve HTML and CSS files from your sibling "/website" folder
 app.use(express.static(path.join(__dirname, "..", "website")));
 
-// 2. Serve JavaScript files from your current "/Js_on" folder
+// 2. Case-Sensitivity Safety: Serve your scripts from both uppercase and lowercase paths
 app.use("/Js_on", express.static(path.join(__dirname)));
+app.use("/js_on", express.static(path.join(__dirname)));
 
-// 3. Serve phone and hardware images from your sibling "/images copy" folder
-app.use("/images copy", express.static(path.join(__dirname, "..", "images copy")));
+// 3. Serve phone and hardware images from your sibling "/images_copy" folder
+app.use("/images_copy", express.static(path.join(__dirname, "..", "images_copy")));
 
 // Force the server to send index.html when opening the home page (Fixes "Cannot GET")
 app.get("/", (req, res) => {

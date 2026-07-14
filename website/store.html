@@ -6,6 +6,9 @@
     <title>Hardware Gallery | RDX</title>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="style.css">
+        <!-- This line loads your logo.svg in your browser tab, but keeps it hidden on the page -->
+    <link rel="icon" type="image/svg+xml" href="/images_copy/logo.svg">
+</head>
 </head>
 <body>
 
@@ -20,7 +23,7 @@
         </ul>
         <div style="display: flex; gap: 12px; align-items: center;">
             <!-- Cart Button -->
-            <a href="#" class="nav-signin nav-cart-btn" onclick="openCartDrawer(event)">Cart (<span id="cart-count">0</span>)</a>
+            <a href="#" class="nav-signin nav-cart-btn">Cart (<span id="cart-count">0</span>)</a>
             <a href="#" class="nav-signin" id="navProfileBtn" onclick="handleProfileNavClick(event)">Sign In</a>
         </div>
     </nav>
@@ -46,123 +49,122 @@
             
             <!-- Card 1: iPhone 15 (Smartphones Category) -->
             <div class="gallery-card reveal" data-category="smartphones">
-                <div class="gallery-image"><img src="images copy/iph15-front.png" alt="iPhone 15"></div>
+                <div class="gallery-image"><img src="../images_copy/iph15-front.png" alt="iPhone 15"></div>
                 <div class="gallery-info">
                     <h3>iPhone 15</h3>
                     <p class="price">$400</p>
                     <div style="display: flex; gap: 8px; margin-top: 10px;">
                         <button class="btn-view" style="padding: 8px; font-size: 0.75rem; flex: 1;" 
-                                onclick="openProductSpecs('iPhone 15', '$400', 'The latest benchmark in mobile technology.', 'images copy/iph15-front.png', ['images copy/iph15-frontS.png', 'images copy/iph15-side.png'], 'Storage:128GB;Display:6.1 inch Super Retina;Chip:A16 Bionic;Camera:48MP Dual')">Inspect</button>
-                        
-                        <!-- Corrected: Passes your real FRONT image path instead of phone1.jpg -->
+                                onclick="openProductSpecs('iPhone 15', '$400', 'The latest benchmark in mobile technology.', '../images_copy/iph15-front.png', ['../images_copy/iph15-frontS.png', '../images_copy/iph15-side.png'], 'Storage:128GB;Display:6.1 inch Super Retina;Chip:A16 Bionic;Camera:48MP Dual')">Inspect</button>
                         <button class="btn-primary" style="padding: 8px; font-size: 0.75rem; flex: 1; background: #00e5b4; color: #000;" 
-                                onclick="addToCart('iPhone 15', '$400', 'Hardware', '128GB Storage, Super Retina XDR display.', 'images copy/iph15-front.png')">Add</button>
+                                onclick="addToCart('iPhone 15', '$400', 'Hardware', '128GB Storage, Super Retina XDR display.', '../images_copy/iph15-front.png')">Add</button>
                     </div>
                 </div>
             </div>
 
             <!-- Card 2: Samsung S24 (Smartphones Category) -->
             <div class="gallery-card reveal" data-category="smartphones">
-                <div class="gallery-image"><img src="images copy/Sam24-front.png" alt="Samsung S24"></div>
+                <div class="gallery-image"><img src="../images_copy/Sam24-front.png" alt="Samsung S24"></div>
                 <div class="gallery-info">
                     <h3>Samsung S24</h3>
                     <p class="price">$300</p>
                     <div style="display: flex; gap: 8px; margin-top: 10px;">
                         <button class="btn-view" style="padding: 8px; font-size: 0.75rem; flex: 1;" 
-                                onclick="openProductSpecs('Samsung S24', '$300', 'Elevate your daily utility with generative Galaxy AI.', 'images copy/Sam24-front.png', ['images copy/Sam24-C.png', 'images copy/Sam24-C2.png'], 'Storage:256GB;Display:6.2 inch Dynamic AMOLED;Chip:Exynos 2400;Camera:50MP Triple')">Inspect</button>
+                                onclick="openProductSpecs('Samsung S24', '$300', 'Elevate your daily utility with generative Galaxy AI.', '../images_copy/Sam24-front.png', ['../images_copy/Sam24-C.png', '../images_copy/Sam24-C2.png'], 'Storage:256GB;Display:6.2 inch Dynamic AMOLED;Chip:Exynos 2400;Camera:50MP Triple')">Inspect</button>
                         <button class="btn-primary" style="padding: 8px; font-size: 0.75rem; flex: 1; background: #00e5b4; color: #000;" 
-                                onclick="addToCart('Samsung S24', '$300', 'Hardware', '256GB Storage, Galaxy AI features.', 'images copy/Sam24-front.png')">Add</button>
+                                onclick="addToCart('Samsung S24', '$300', 'Hardware', '256GB Storage, Galaxy AI features.', '../images_copy/Sam24-front.png')">Add</button>
                     </div>
                 </div>
             </div>
             
             <!-- Card 3: NVIDIA RTX 4070 (Components Category) -->
             <div class="gallery-card reveal" data-category="components">
-                <div class="gallery-image"><img src="images copy/RTX4070-F.png" alt="RTX 4070"></div>
+                <div class="gallery-image"><img src="../images_copy/RTX4070-F.png" alt="RTX 4070"></div>
                 <div class="gallery-info">
                     <h3>NVIDIA RTX 4070</h3>
                     <p class="price">$599</p>
                     <div style="display: flex; gap: 8px; margin-top: 10px;">
                         <button class="btn-view" style="padding: 8px; font-size: 0.75rem; flex: 1;" 
-                                onclick="openProductSpecs('RTX 4070 GPU', '$599', 'High-end graphics processing unit supporting ray tracing.', 'images copy/RTX4070-F.png', ['images copy/RTX4070-U.png', 'images copy/RTX4070-B.png'], 'VRAM:12GB GDDR6X;Interface:PCI Express 4.0;Power:200W;Ports:HDMI 2.1, DisplayPort 1.4a')">Inspect</button>
+                                onclick="openProductSpecs('RTX 4070 GPU', '$599', 'High-end graphics processing unit supporting ray tracing.', '../images_copy/RTX4070-F.png', ['../images_copy/RTX4070-U.png', '../images_copy/RTX4070-B.png'], 'VRAM:12GB GDDR6X;Interface:PCI Express 4.0;Power:200W;Ports:HDMI 2.1, DisplayPort 1.4a')">Inspect</button>
                         <button class="btn-primary" style="padding: 8px; font-size: 0.75rem; flex: 1; background: #00e5b4; color: #000;" 
-                                onclick="addToCart('RTX 4070 GPU', '$599', 'Hardware', 'NVIDIA RTX 4070 12GB graphics card.', 'images copy/RTX4070-F.png')">Add</button>
+                                onclick="addToCart('RTX 4070 GPU', '$599', 'Hardware', 'NVIDIA RTX 4070 12GB graphics card.', '../images_copy/RTX4070-F.png')">Add</button>
                     </div>
                 </div>
             </div>
 
             <!-- Card 4: OnePlus 12 (Smartphones Category) -->
             <div class="gallery-card reveal" data-category="smartphones">
-                <div class="gallery-image"><img src="images copy/OP12-front.png" alt="OnePlus 12"></div>
+                <div class="gallery-image"><img src="../images_copy/OP12-front.png" alt="OnePlus 12"></div>
                 <div class="gallery-info">
                     <h3>OnePlus 12</h3>
                     <p class="price">$500</p>
                     <div style="display: flex; gap: 8px; margin-top: 10px;">
                         <button class="btn-view" style="padding: 8px; font-size: 0.75rem; flex: 1;" 
-                                onclick="openProductSpecs('OnePlus 12', '$500', 'Flagship smartphone with advanced camera system.', 'images copy/OP12-front.png', ['images copy/OP12-S.png', 'images copy/OP12-back.png'], 'Storage:256GB;Display:6.82 inch Fluid AMOLED;Chip:Snapdragon 8 Gen 2;Camera:50MP Triple')">Inspect</button>
+                                onclick="openProductSpecs('OnePlus 12', '$500', 'Flagship smartphone with advanced camera system.', '../images_copy/OP12-front.png', ['../images_copy/OP12-S.png', '../images_copy/OP12-back.png'], 'Storage:256GB;Display:6.82 inch Fluid AMOLED;Chip:Snapdragon 8 Gen 2;Camera:50MP Triple')">Inspect</button>
                         <button class="btn-primary" style="padding: 8px; font-size: 0.75rem; flex: 1; background: #00e5b4; color: #000;" 
-                                onclick="addToCart('OnePlus 12', '$500', 'Hardware', '256GB Storage, advanced camera system.', 'images copy/OP12-front.png')">Add</button>
+                                onclick="addToCart('OnePlus 12', '$500', 'Hardware', '256GB Storage, advanced camera system.', '../images_copy/OP12-front.png')">Add</button>
                     </div>
                 </div>
             </div>
 
             <!-- Card 5: Samsung Z Fold 5 (Smartphones Category) -->
             <div class="gallery-card reveal" data-category="smartphones">
-                <div class="gallery-image"><img src="images copy/SamZF5-front.png" alt="Samsung Z Fold 5"></div>
+                <div class="gallery-image"><img src="../images_copy/SamZF5-front.png" alt="Samsung Z Fold 5"></div>
                 <div class="gallery-info">
                     <h3>Samsung Z Fold 5</h3>
                     <p class="price">$200</p>
                     <div style="display: flex; gap: 8px; margin-top: 10px;">
                         <button class="btn-view" style="padding: 8px; font-size: 0.75rem; flex: 1;" 
-                                onclick="openProductSpecs('Samsung Z Fold 5', '$200', 'Innovative foldable smartphone with multitasking capabilities.', 'images copy/SamZF5-front.png', ['images copy/SamZF5-Open.png', 'images copy/SamZF5-back.png'], 'Storage:512GB;Display:7.6 inch Dynamic AMOLED;Chip:Snapdragon 8 Gen 2;Camera:50MP Triple')">Inspect</button>
+                                onclick="openProductSpecs('Samsung Z Fold 5', '$200', 'Innovative foldable smartphone with multitasking capabilities.', '../images_copy/SamZF5-front.png', ['../images_copy/SamZF5-Open.png', '../images_copy/SamZF5-back.png'], 'Storage:512GB;Display:7.6 inch Dynamic AMOLED;Chip:Snapdragon 8 Gen 2;Camera:50MP Triple')">Inspect</button>
                         <button class="btn-primary" style="padding: 8px; font-size: 0.75rem; flex: 1; background: #00e5b4; color: #000;" 
-                                onclick="addToCart('Samsung Z Fold 5', '$200', 'Hardware', '512GB Storage, foldable display, multitasking features.', 'images copy/SamZFold5-F.png')">Add</button>
+                                onclick="addToCart('Samsung Z Fold 5', '$200', 'Hardware', '512GB Storage, foldable display, multitasking features.', '../images_copy/SamZF5-front.png')">Add</button>
                     </div>
                 </div>
             </div>
 
 
-            <!-- Card 5: Samsung Z Fold 5 (Smartphones Category) -->
+            <!-- Card 6: iPhone 14 Pro Max (Smartphones Category) -->
             <div class="gallery-card reveal" data-category="smartphones">
-                <div class="gallery-image"><img src="images copy/iph14pm-front.png" alt="iPhone 14 Pro Max"></div>
+                <div class="gallery-image"><img src="../images_copy/iph14pm-front.png" alt="iPhone 14 Pro Max"></div>
                 <div class="gallery-info">
                     <h3>iPhone 14 Pro Max</h3>
                     <p class="price">$600</p>
                     <div style="display: flex; gap: 8px; margin-top: 10px;">
                         <button class="btn-view" style="padding: 8px; font-size: 0.75rem; flex: 1;" 
-                                onclick="openProductSpecs('iPhone 14 Pro Max', '$600', 'The ultimate in mobile performance and design.', 'images copy/iph14pm-front.png', ['images copy/iph14pm-front1.png', 'images copy/iph14pm-backside.png'], 'Storage:256GB;Display:6.7 inch Super Retina XDR;Chip:A15 Bionic;Camera:48MP Triple')">Inspect</button>
+                                onclick="openProductSpecs('iPhone 14 Pro Max', '$600', 'The ultimate in mobile performance and design.', '../images_copy/iph14pm-front.png', ['../images_copy/iph14pm-front1.png', '../images_copy/iph14pm-backside.png'], 'Storage:256GB;Display:6.7 inch Super Retina XDR;Chip:A15 Bionic;Camera:48MP Triple')">Inspect</button>
                         <button class="btn-primary" style="padding: 8px; font-size: 0.75rem; flex: 1; background: #00e5b4; color: #000;" 
-                                onclick="addToCart('iPhone 14 Pro Max', '$600', 'Hardware', '256GB Storage, Super Retina XDR display, A15 Bionic chip.', 'images copy/iph14pm-front.png')">Add</button>
+                                onclick="addToCart('iPhone 14 Pro Max', '$600', 'Hardware', '256GB Storage, Super Retina XDR display, A15 Bionic chip.', '../images_copy/iph14pm-front.png')">Add</button>
                     </div>
                 </div>
             </div>
  
-            <!-- Add more product cards as needed -->
-        <div class="gallery-card reveal" data-category="smartphones">
-                <div class="gallery-image"><img src="images copy/GP8-front.png" alt="Google Pixel 8"></div>
+            <!-- Card 7: Google Pixel 8 (Smartphones Category) -->
+            <div class="gallery-card reveal" data-category="smartphones">
+                <div class="gallery-image"><img src="../images_copy/GP8-front.png" alt="Google Pixel 8"></div>
                 <div class="gallery-info">
                     <h3>Google Pixel 8</h3>
                     <p class="price">$300</p>
                     <div style="display: flex; gap: 8px; margin-top: 10px;">
                         <button class="btn-view" style="padding: 8px; font-size: 0.75rem; flex: 1;" 
-                                onclick="openProductSpecs('Google Pixel 8', '$300', 'The ultimate in mobile performance and design.', 'images copy/GP8-front.png', ['images copy/GP8-C.png', 'images copy/GP8-Back.png'], 'Storage:128GB-256GB;Display:6.2 inch Acuta Oled Display;Chip:Google Tensor G3;Camera:50MP Triple')">Inspect</button>
+                                onclick="openProductSpecs('Google Pixel 8', '$300', 'The ultimate in mobile performance and design.', '../images_copy/GP8-front.png', ['../images_copy/GP8-C.png', '../images_copy/GP8-Back.png'], 'Storage:128GB-256GB;Display:6.2 inch Acuta Oled Display;Chip:Google Tensor G3;Camera:50MP Triple')">Inspect</button>
                         <button class="btn-primary" style="padding: 8px; font-size: 0.75rem; flex: 1; background: #00e5b4; color: #000;" 
-                                onclick="addToCart('Google Pixel 8', '$300', 'Hardware', '128GB-256GB Storage, Actua Oled Display, Google Tensor G3.', 'images copy/GP8-front.png')">Add</button>
+                                onclick="addToCart('Google Pixel 8', '$300', 'Hardware', '128GB-256GB Storage, Actua Oled Display, Google Tensor G3.', '../images_copy/GP8-front.png')">Add</button>
                     </div>
                 </div>
             </div>
             
 
+            <!-- Card 8: Samsung Galaxy S22 Ultra (Smartphones Category) -->
             <div class="gallery-card reveal" data-category="smartphones">
-                <div class="gallery-image"><img src="images copy/Sam22U-front.png" alt="Samsung Galaxy S22 Ultra"></div>
+                <div class="gallery-image"><img src="../images_copy/Sam22U-front.png" alt="Samsung Galaxy S22 Ultra"></div>
                 <div class="gallery-info">
                     <h3>Samsung Galaxy S22 Ultra</h3>
                     <p class="price">$300</p>
                     <div style="display: flex; gap: 8px; margin-top: 10px;">
                         <button class="btn-view" style="padding: 8px; font-size: 0.75rem; flex: 1;" 
-                                onclick="openProductSpecs('Samsung Galaxy S22 Ultra', '$300', 'The ultimate in mobile performance and design.', 'images copy/Sam22U-front.png', ['images copy/Sam22U-side.png', 'images copy/Sam22U-base.png'], 'Storage:256GB;Display:6.8 Dynamic AMOLED;Chip:Snapdragon 8 Gen 1;Camera:48MP Triple')">Inspect</button>
+                                onclick="openProductSpecs('Samsung Galaxy S22 Ultra', '$300', 'The ultimate in mobile performance and design.', '../images_copy/Sam22U-front.png', ['../images_copy/Sam22U-side.png', '../images_copy/Sam22U-base.png'], 'Storage:256GB;Display:6.8 Dynamic AMOLED;Chip:Snapdragon 8 Gen 1;Camera:48MP Triple')">Inspect</button>
                         <button class="btn-primary" style="padding: 8px; font-size: 0.75rem; flex: 1; background: #00e5b4; color: #000;" 
-                                onclick="addToCart('Samsung Galaxy S22 Ultra', '$300', 'Hardware', '256GB Storage, Super Retina XDR display, A16 Bionic chip.', 'images copy/Sam22U-front.png')">Add</button>
+                                onclick="addToCart('Samsung Galaxy S22 Ultra', '$300', 'Hardware', '256GB Storage, Super Retina XDR display, A16 Bionic chip.', '../images_copy/Sam22U-front.png')">Add</button>
                     </div>
                 </div>
             </div>
@@ -175,53 +177,14 @@
         <div class="tm-right">Designed with precision.</div>
     </footer>
 
-  <!-- AI Assistant Widget -->
-    <div class="chat-widget">
-        <button class="chat-fab" id="chatFab" onclick="toggleChatWidget()" aria-label="Open chat assistant">
-            <svg class="chat-fab-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20H7L4 22V12Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                <circle cx="8.5" cy="12" r="1" fill="currentColor"/>
-                <circle cx="12" cy="12" r="1" fill="currentColor"/>
-                <circle cx="15.5" cy="12" r="1" fill="currentColor"/>
-            </svg>
-        </button>
-        <div class="chat-panel" id="chatPanel">
-            <div class="chat-panel-header">
-                <div class="chat-header-info">
-                    <div class="chat-header-avatar">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20H7L4 22V12Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <h4>RDX Assistant</h4>
-                        <span class="chat-status"><span class="chat-status-dot"></span>Products, orders &amp; support</span>
-                    </div>
-                </div>
-                <button class="chat-close-btn" onclick="toggleChatWidget()" aria-label="Close chat">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-                    </svg>
-                </button>
-            </div>
-            <div class="chat-messages" id="chatMessages">
-                <div class="chat-msg chat-msg-bot">Hey! I can explain any product in plain English, or help with orders, repairs, and general questions. What do you need?</div>
-            </div>
-            <div class="chat-input-row">
-                <input type="text" id="chatInput" placeholder="Ask me anything..." onkeydown="if(event.key==='Enter') sendChatMessage()">
-                <button class="chat-send-btn" onclick="sendChatMessage()" aria-label="Send message">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M4 12L20 4L14 20L11 13L4 12Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </div>
-   
-<!-- Firebase SDK Libraries (Easiest Cloud Setup) -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script> <!-- ADD THIS LINE -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script src="/Js_on/script.js"></script>
+    <!-- Firebase SDK Libraries (Ensures database connection is online on this page) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Your main script -->
+    <script src="/Js_on/script.js"></script>
+</body>
+</html>
 </body>
 </html>
