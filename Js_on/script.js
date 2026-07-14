@@ -1,26 +1,7 @@
 /* ============================================================
-   1. GOOGLE FIREBASE CLOUD DATABASE CONFIGURATION & SAFETY
+   1. GOOGLE FIREBASE CLOUD DATABASE SAFETY & STATE
    ============================================================ */
-const firebaseConfig = {
-    apiKey: "AIzaSyBocUJuMTrPh6rynHpzLsv-yRU5eNUD41Q",
-    authDomain: "gtnbotp-7778a.firebaseapp.com",
-    databaseURL: "https://gtnbotp-7778a-default-rtdb.firebaseio.com",
-    projectId: "gtnbotp-7778a",
-    storageBucket: "gtnbotp-7778a.firebasestorage.app",
-    messagingSenderId: "30007546279",
-    appId: "1:30007546279:web:25d235582d9e3887d36682",
-    measurementId: "G-DM54V040T7"
-};
-
-// Initialize Firebase & Cloud Firestore
-let db = null;
-if (typeof firebase !== 'undefined') {
-    firebase.initializeApp(firebaseConfig);
-    db = firebase.firestore();
-    console.log("✅ Firebase Cloud Firestore integrated successfully.");
-} else {
-    console.warn("⚠️ Firebase SDK not loaded on this page.");
-}
+let db = null; // Instantiated dynamically on startup
 
 /* ============================================================
    2. UNIVERSAL PARALLAX (Mouse Follow)
@@ -524,6 +505,42 @@ async function initializeCloudDataSync() {
     }
 }
 
+// Master initialization routine — fetches keys and boots both Firebase and Stripe
+async function initializeEcosystem() {
+    try {
+        // Fetch variables from our secure backend config endpoint
+        const configResponse = await fetch("http://localhost:3000/api/config");
+        const config = await configResponse.json();
+
+        // Initialize Firebase connection dynamically
+        if (typeof firebase !== 'undefined' && config.firebaseConfig) {
+            firebase.initializeApp(config.firebaseConfig);
+            db = firebase.firestore();
+            console.log("✅ Firebase Cloud Firestore integrated successfully.");
+        }
+
+        // Initialize Stripe elements dynamically if we are on checkout page
+        if (window.location.pathname.includes("checkout.html") && config.stripePublishableKey) {
+            initStripeElements(config.stripePublishableKey);
+        }
+
+        // If we are loading tracking.html, run the auto-load tracker logic
+        if (window.location.pathname.includes("tracking.html")) {
+            initAutoTracking();
+        }
+
+        // Once database is initialized, safe to boot normal data bindings
+        updateCartUI();
+        updateProfileNavUI();
+        initCategoryFilters();
+        checkActiveSubscriptionButtons();
+        await initializeCloudDataSync();
+
+    } catch (err) {
+        console.error("Ecosystem initialization failed:", err);
+    }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     const uiInjections = `
         <!-- Cart Drawer -->
@@ -595,11 +612,6 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
     
     document.body.insertAdjacentHTML('beforeend', uiInjections);
-    
-    updateCartUI();
-    updateProfileNavUI();
-    initCategoryFilters();
-    checkActiveSubscriptionButtons();
 
     document.querySelectorAll(".nav-cart-btn").forEach(link => {
         link.addEventListener("click", (event) => {
@@ -608,7 +620,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    initializeCloudDataSync();
+    // Boot everything safely through the configuration pipeline
+    initializeEcosystem();
 });
 
 function switchContactTab(tab) {
@@ -710,9 +723,56 @@ function checkActiveSubscriptionButtons() {
 }
 
 /* ============================================================
-   10. MAIN CHECKOUT PAGE LOGIC (checkout.html)
+   10. MAIN CHECKOUT PAGE LOGIC (checkout.html) & STRIPE
    ============================================================ */
 let checkoutCurrentStep = 1;
+let stripeInstance = null;
+let cardNumElement = null;
+let cardExpiryElement = null;
+let cardCvcElement = null;
+
+// Sets up secure card element instances with passed Publishable Key
+function initStripeElements(publishableKey) {
+    stripeInstance = Stripe(publishableKey);
+
+    const elements = stripeInstance.elements();
+
+    const elementStyles = {
+        base: {
+            color: '#ffffff',
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '14.4px',
+            '::placeholder': {
+                color: 'rgba(255, 255, 255, 0.25)',
+            },
+        },
+        invalid: {
+            color: '#ff7a00',
+        },
+    };
+
+    cardNumElement = elements.create('cardNumber', { style: elementStyles });
+    cardExpiryElement = elements.create('cardExpiry', { style: elementStyles });
+    cardCvcElement = elements.create('cardCvc', { style: elementStyles });
+
+    if (document.getElementById('stripe-card-number')) {
+        cardNumElement.mount('#stripe-card-number');
+        cardExpiryElement.mount('#stripe-card-expiry');
+        cardCvcElement.mount('#stripe-card-cvc');
+
+        // Dynamically add focus class to parents so standard input borders animate
+        [cardNumElement, cardExpiryElement, cardCvcElement].forEach(el => {
+            el.on('focus', () => {
+                const parent = document.getElementById(el._parent.id);
+                if (parent) parent.classList.add('stripe-input-container--focus');
+            });
+            el.on('blur', () => {
+                const parent = document.getElementById(el._parent.id);
+                if (parent) parent.classList.remove('stripe-input-container--focus');
+            });
+        });
+    }
+}
 
 function renderCheckoutPage() {
     const mainFlow = document.getElementById("checkoutMainFlow");
@@ -819,66 +879,108 @@ function populateReviewStep() {
     document.getElementById('reviewShippingText').innerText =
         `${name} — ${address}${aptText}, ${city}, ${state} ${zip} · ${phone}`;
 
-    const cardNum = document.getElementById('checkoutCard').value.replace(/\s/g, '');
-    const last4 = cardNum.slice(-4) || '••••';
-    document.getElementById('reviewPaymentText').innerText = `Card ending in ${last4}`;
+    const cardName = document.getElementById('checkoutName').value || 'Card Holder';
+    document.getElementById('reviewPaymentText').innerText = `Card under name: ${cardName}`;
 }
 
-// Complete checkout and save details to Firestore
+// Complete checkout with secure Stripe payment intent creation
 async function handleCheckoutSubmit() {
     if (!db) {
         alert("Database is currently offline.");
         return;
     }
     const session = localStorage.getItem("rdx_session");
-    if (!session) return;
-
-    if (localCartState.length === 0) return;
+    if (!session || localCartState.length === 0) return;
 
     const user = JSON.parse(session);
     const mainFlow = document.getElementById("checkoutMainFlow");
     const successFlow = document.getElementById("checkoutSuccessFlow");
     const stepsNav = document.getElementById("checkoutStepsNav");
+    const checkoutSubmitBtn = document.getElementById("checkoutSubmitBtn");
 
-    const subscriptionItem = localCartState.find(item => item.type === "Subscription");
-    const activeSubscriptionName = subscriptionItem ? subscriptionItem.title : "";
+    const email = document.getElementById("checkoutEmail").value;
+    const cardName = document.getElementById("checkoutName").value;
     const orderTotal = localCartState.reduce((sum, item) => sum + (item.numericPrice * item.quantity), 0);
-    const orderId = "RDX-" + Date.now();
+
+    // Disable button to prevent double-charging
+    checkoutSubmitBtn.disabled = true;
+    checkoutSubmitBtn.innerText = "Processing secure transaction...";
 
     try {
-        // Save order document inside Cloud Firestore "orders" collection
-        await db.collection("orders").doc(orderId).set({
-            orderId: orderId,
-            userEmail: user.email,
-            date: new Date().toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }),
-            items: localCartState,
-            total: orderTotal
+        // 1. Call backend server to initiate Stripe payment intent
+        const response = await fetch("http://localhost:3000/api/create-payment-intent", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                amount: orderTotal,
+                currency: "usd",
+                email: email
+            })
         });
 
-        // Reset persistent shopping cart inside Firestore
-        const updateData = { cart: [] };
-        if (activeSubscriptionName) {
-            updateData.activeSubscription = activeSubscriptionName;
+        const data = await response.json();
+        if (data.error) throw new Error(data.error);
+
+        // 2. Instruct Stripe browser SDK to confirm credit card processing safely
+        const stripeResult = await stripeInstance.confirmCardPayment(data.clientSecret, {
+            payment_method: {
+                card: cardNumElement,
+                billing_details: {
+                    name: cardName,
+                    email: email
+                }
+            }
+        });
+
+        if (stripeResult.error) {
+            throw new Error(stripeResult.error.message);
         }
-        await db.collection("users").doc(user.email).update(updateData);
 
-        if (activeSubscriptionName) {
-            const activeSubKey = "rdx_active_subscription" + getActiveUserSuffix();
-            localStorage.setItem(activeSubKey, activeSubscriptionName);
+        // 3. Confirm checkout succeeded
+        if (stripeResult.paymentIntent.status === 'succeeded') {
+            const orderId = "RDX-" + Date.now();
+            const subscriptionItem = localCartState.find(item => item.type === "Subscription");
+            const activeSubscriptionName = subscriptionItem ? subscriptionItem.title : "";
+
+            // Save completed order details into cloud database
+            await db.collection("orders").doc(orderId).set({
+                orderId: orderId,
+                userEmail: user.email,
+                date: new Date().toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }),
+                items: localCartState,
+                total: orderTotal,
+                paymentStatus: "Paid",
+                trackingNumber: "Pending",     // Default status
+                shippingStatus: "Processed"    // Default status
+            });
+
+            // Reset shopping cart on server
+            const updateData = { cart: [] };
+            if (activeSubscriptionName) {
+                updateData.activeSubscription = activeSubscriptionName;
+            }
+            await db.collection("users").doc(user.email).update(updateData);
+
+            if (activeSubscriptionName) {
+                const activeSubKey = "rdx_active_subscription" + getActiveUserSuffix();
+                localStorage.setItem(activeSubKey, activeSubscriptionName);
+            }
+
+            localCartState = []; // Reset local cart states
+            updateCartUI();
+
+            document.getElementById("successTitle").innerText = "Order Complete!";
+            document.getElementById("successMessage").innerText = `Thank you for your purchase! Your payment has been secured via Stripe, and your order has been stored inside the cloud database.`;
+
+            mainFlow.style.display = "none";
+            stepsNav.style.display = "none";
+            successFlow.style.display = "block";
         }
-
-        localCartState = []; // Reset local cart memory
-        updateCartUI();
-
-        document.getElementById("successTitle").innerText = "Order Complete!";
-        document.getElementById("successMessage").innerText = `Thank you for your order! Your purchase transaction has been successfully processed in the Firebase cloud database.`;
-
-        mainFlow.style.display = "none";
-        stepsNav.style.display = "none";
-        successFlow.style.display = "block";
     } catch (err) {
-        console.error("Database checkout sequence error:", err);
-        alert("Failed to submit order transaction.");
+        console.error("Database or payment submit error:", err);
+        alert(err.message || "Failed to process payment successfully.");
+        checkoutSubmitBtn.disabled = false;
+        checkoutSubmitBtn.innerText = "Place Order";
     }
 }
 
@@ -956,6 +1058,8 @@ function renderDashboardTransmissions(orders) {
                     <span class="order-date">${order.date} · ${order.orderId}</span>
                     <span class="order-total">$${order.total.toFixed(2)}</span>
                 </div>
+                <!-- Interactive Tracking Link -->
+                <a href="tracking.html?id=${order.orderId}" class="review-edit-link" style="text-decoration:none; display:inline-block; font-weight:600; margin-top:8px;">Track Shipment</a>
             </div>
         `);
     });
@@ -1097,6 +1201,10 @@ async function renderOrderHistory() {
                 <div class="order-history-products">
                     ${productsHTML}
                 </div>
+                <!-- Interactive Tracking Link -->
+                <div style="margin-top: 14px; border-top: 1px solid rgba(255,255,255,0.03); padding-top: 10px;">
+                    <a href="tracking.html?id=${order.orderId}" class="review-edit-link" style="text-decoration:none; display:inline-block; font-weight:600;">Track Shipment with USPS</a>
+                </div>
             </div>
         `);
     });
@@ -1205,4 +1313,162 @@ async function sendChatMessage() {
     }
 
     messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+/* ============================================================
+   14. DYNAMIC PORTAL TRACKING LOGIC (tracking.html)
+   ============================================================ */
+
+// Auto-loads a signed-in user's latest package status or parses URL search terms
+async function initAutoTracking() {
+    // 1. Check if there is an Order ID in the URL parameters (e.g., ?id=RDX-12345)
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlOrderId = urlParams.get('id');
+    const urlTracking = urlParams.get('tracking');
+    const targetQuery = urlOrderId || urlTracking;
+
+    if (targetQuery) {
+        // Pre-fill input value for user reference
+        document.getElementById("trackingQuery").value = targetQuery;
+
+        try {
+            // Search Firestore by Order ID first
+            let snapshot = await db.collection("orders")
+                .where("orderId", "==", targetQuery)
+                .get();
+
+            // Fallback: Search by Tracking Number
+            if (snapshot.empty) {
+                snapshot = await db.collection("orders")
+                    .where("trackingNumber", "==", targetQuery)
+                    .get();
+            }
+
+            if (!snapshot.empty) {
+                const order = snapshot.docs[0].data();
+                renderTrackingTimeline(order);
+                return; // Completed dynamic load via URL
+            }
+        } catch (err) {
+            console.error("Direct URL parameters tracking lookup failed:", err);
+        }
+    }
+
+    // 2. Fallback: Automatically load current logged-in user's latest order if no query parameters
+    const session = localStorage.getItem("rdx_session");
+    if (!session) return; // Leave page empty for manual guest query
+
+    const user = JSON.parse(session);
+    try {
+        const snapshot = await db.collection("orders")
+            .where("userEmail", "==", user.email)
+            .get();
+
+        if (snapshot.empty) return;
+
+        const orders = [];
+        snapshot.forEach(doc => orders.push(doc.data()));
+
+        // Sort orders by timestamp extraction to get the newest order first
+        orders.sort((a, b) => b.orderId.replace("RDX-", "") - a.orderId.replace("RDX-", ""));
+
+        const latestOrder = orders[0];
+        renderTrackingTimeline(latestOrder);
+
+        // Pre-fill input value for user reference
+        document.getElementById("trackingQuery").value = 
+            latestOrder.trackingNumber !== "Pending" ? latestOrder.trackingNumber : latestOrder.orderId;
+
+    } catch (err) {
+        console.error("Dynamic auto-tracking fetch failed:", err);
+    }
+}
+
+// Queries Firestore via custom search string input (Tracking Number or Order ID)
+async function findShipment() {
+    const query = document.getElementById("trackingQuery").value.trim();
+    const errorEl = document.getElementById("trackingError");
+    const timelineEl = document.getElementById("timelineWrapper");
+
+    if (!query) return;
+    errorEl.style.display = "none";
+    timelineEl.style.display = "none";
+
+    try {
+        // Query by Order ID first
+        let snapshot = await db.collection("orders")
+            .where("orderId", "==", query)
+            .get();
+
+        // Fallback: Query by USPS Tracking Number
+        if (snapshot.empty) {
+            snapshot = await db.collection("orders")
+                .where("trackingNumber", "==", query)
+                .get();
+        }
+
+        if (snapshot.empty) {
+            errorEl.style.display = "block";
+            return;
+        }
+
+        const order = snapshot.docs[0].data();
+        renderTrackingTimeline(order);
+
+    } catch (err) {
+        console.error("Direct manual tracking lookup failed:", err);
+        errorEl.style.display = "block";
+    }
+}
+
+// Configures timeline active statuses and maps official USPS external tracking anchor
+function renderTrackingTimeline(order) {
+    const timelineEl = document.getElementById("timelineWrapper");
+    const statusText = document.getElementById("shipmentStatusText");
+    const fill = document.getElementById("timelineProgressFill");
+    const link = document.getElementById("uspsDirectLink");
+
+    const trackingNum = order.trackingNumber || "Pending";
+    const status = (order.shippingStatus || (trackingNum !== "Pending" ? "In Transit" : "Processed")).toLowerCase();
+
+    // Reset visual timeline states first
+    document.querySelectorAll(".timeline-step").forEach(el => el.classList.remove("active", "complete"));
+
+    let progressWidth = "0%";
+
+    if (status === "processed") {
+        document.getElementById("step1").classList.add("active");
+        progressWidth = "10%";
+        statusText.innerText = "Order Processed";
+    } else if (status === "received") {
+        document.getElementById("step1").classList.add("complete");
+        document.getElementById("step2").classList.add("active");
+        progressWidth = "33%";
+        statusText.innerText = "Received by USPS";
+    } else if (status === "in transit") {
+        document.getElementById("step1").classList.add("complete");
+        document.getElementById("step2").classList.add("complete");
+        document.getElementById("step3").classList.add("active");
+        progressWidth = "66%";
+        statusText.innerText = "In Transit within USPS Network";
+    } else if (status === "delivered") {
+        document.getElementById("step1").classList.add("complete");
+        document.getElementById("step2").classList.add("complete");
+        document.getElementById("step3").classList.add("complete");
+        document.getElementById("step4").classList.add("active");
+        progressWidth = "100%";
+        statusText.innerText = "Delivered & Received";
+    }
+
+    fill.style.width = progressWidth;
+
+    // If shipment has left, provide official external USPS link
+    if (trackingNum !== "Pending") {
+        link.href = `https://tools.usps.com/go/TrackConfirmAction?tLabels=${trackingNum}`;
+        link.style.display = "inline-block";
+    } else {
+        link.style.display = "none";
+    }
+
+    timelineEl.style.display = "block";
 }

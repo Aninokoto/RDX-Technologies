@@ -1309,7 +1309,8 @@ body.scroll-locked {
    13. FORM INPUTS & SYSTEM BUTTONS
    ============================================================ */
 input, 
-textarea {
+textarea,
+.stripe-input-container {
     width: 100%;
     background: rgba(255, 255, 255, 0.03) !important;
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
@@ -2804,4 +2805,1515 @@ body:has(.specs-modal.active) .chat-widget {
     .chat-widget::before {
         display: none !important;
     }
+}
+
+/* ============================================================
+   13. FORM INPUTS & SYSTEM BUTTONS
+   ============================================================ */
+input, 
+textarea,
+.stripe-input-container {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 12px !important;
+    padding: 14px 18px !important;
+    color: #ffffff !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 0.9rem !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    box-sizing: border-box;
+}
+
+input:focus, 
+textarea:focus {
+    outline: none !important;
+    border-color: #00e5b4 !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+    box-shadow: 0 0 15px rgba(0, 229, 180, 0.1) !important;
+}
+
+input::placeholder, 
+textarea::placeholder {
+    color: rgba(255, 255, 255, 0.25) !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus {
+    -webkit-text-fill-color: #ffffff !important;
+    -webkit-box-shadow: 0 0 0px 1000px #0f0f0f inset !important;
+    transition: background-color 500s ease-in-out 0s !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 12px !important;
+}
+
+select {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 12px !important;
+    padding: 14px 40px 14px 18px !important;
+    color: #ffffff !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 0.9rem !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    box-sizing: border-box;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.45)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 16px;
+}
+
+select:focus {
+    outline: none !important;
+    border-color: #00e5b4 !important;
+    background-color: rgba(255, 255, 255, 0.06) !important;
+    box-shadow: 0 0 15px rgba(0, 229, 180, 0.1) !important;
+}
+
+select option {
+    background: #0f0f0f;
+    color: #fff;
+}
+
+.btn-checkout-submit, 
+button[type="submit"] {
+    background: #00e5b4 !important;
+    color: #0a0a0a !important;
+    border: none !important;
+    padding: 14px 20px !important;
+    border-radius: 12px !important;
+    font-weight: 700 !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 0.9rem !important;
+    letter-spacing: 0.5px !important;
+    cursor: pointer !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    box-shadow: 0 4px 15px rgba(0, 229, 180, 0.2) !important;
+    width: 100%;
+    display: block;
+}
+
+.btn-checkout-submit:hover, 
+button[type="submit"]:hover {
+    background: #ffffff !important;
+    color: #0a0a0a !important;
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.25) !important;
+    transform: translateY(-2px) !important;
+}
+
+.btn-checkout-submit:active, 
+button[type="submit"]:active {
+    transform: translateY(0) !important;
+}
+
+/* ============================================================
+   14. SYSTEM DIALOG CLOSE "X" BUTTONS
+   ============================================================ */
+.checkout-close, 
+.close-btn {
+    position: absolute !important;
+    top: 25px !important;
+    right: 30px !important;
+    background: none !important;
+    border: none !important;
+    color: rgba(255, 255, 255, 0.4) !important;
+    font-size: 1.8rem !important;
+    font-weight: 300 !important;
+    cursor: pointer !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    line-height: 1 !important;
+    padding: 0 !important;
+    z-index: 10;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 32px !important;
+    height: 32px !important;
+}
+
+.checkout-close:hover, 
+.close-btn:hover {
+    color: #00e5b4 !important;
+    transform: scale(1.1) rotate(90deg) !important;
+}
+
+/* ============================================================
+   15. NEW DYNAMIC CHECKOUT PAGE SUMMARY OVERHAUL
+   ============================================================ */
+.checkout-item-row {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 18px 0 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important;
+    width: 100% !important;
+}
+
+.checkout-item-details-block {
+    display: flex !important;
+    align-items: center !important;
+    gap: 15px !important;
+}
+
+.checkout-item-img {
+    width: 50px !important;
+    height: 50px !important;
+    min-width: 50px !important;
+    object-fit: contain !important;
+    background: #000000 !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-radius: 10px !important;
+    padding: 4px !important;
+    display: block !important;
+}
+
+.checkout-item-text-info {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2px !important;
+}
+
+.checkout-item-text-info h3 {
+    font-family: 'Syne', sans-serif !important;
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    color: #ffffff !important;
+}
+
+.checkout-item-text-info p {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 0.8rem !important;
+    color: rgba(255, 255, 255, 0.45) !important;
+    line-height: 1.4 !important;
+}
+
+.checkout-item-price {
+    font-family: 'Syne', sans-serif !important;
+    font-weight: 700 !important;
+    color: #00e5b4 !important;
+    font-size: 1.05rem !important;
+    margin-left: 20px !important;
+    white-space: nowrap !important;
+}
+
+/* ============================================================
+   16. AMAZON-STYLE MULTI-STEP CHECKOUT (MOCK)
+   ============================================================ */
+.checkout-steps-nav {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    margin-bottom: 45px;
+}
+
+.step-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.4;
+    transition: opacity 0.3s ease;
+}
+
+.step-node.active,
+.step-node.complete {
+    opacity: 1;
+}
+
+.step-circle {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.03);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+.step-node.active .step-circle {
+    border-color: #00e5b4;
+    background: #00e5b4;
+    color: #0a0a0a;
+    box-shadow: 0 0 18px rgba(0, 229, 180, 0.35);
+}
+
+.step-node.complete .step-circle {
+    border-color: #00e5b4;
+    background: rgba(0, 229, 180, 0.12);
+    color: #00e5b4;
+}
+
+.step-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.step-line {
+    width: 70px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.12);
+    margin: 17px 10px 0;
+}
+
+.checkout-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 50px;
+    align-items: start;
+}
+
+.checkout-main-col {
+    min-width: 0;
+}
+
+.checkout-step-panel {
+    display: none;
+    animation: fadeStepIn 0.35s ease;
+}
+
+.checkout-step-panel.active {
+    display: block;
+}
+
+@keyframes fadeStepIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.step-panel-heading {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    margin-bottom: 25px;
+}
+
+.checkout-field {
+    margin-bottom: 18px;
+}
+
+.checkout-field label {
+    display: block;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.checkout-field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.checkout-field-row.three {
+    grid-template-columns: 1.4fr 1fr 1fr;
+}
+
+.checkout-step-actions {
+    margin-top: 30px;
+}
+
+.checkout-step-actions.split {
+    display: flex;
+    gap: 14px;
+}
+
+.checkout-step-actions.split .btn-checkout-submit {
+    flex: 1;
+}
+
+.btn-checkout-back {
+    background: rgba(255, 255, 255, 0.04) !important;
+    color: #fff !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    padding: 14px 24px !important;
+    border-radius: 12px !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 0.9rem !important;
+}
+
+.btn-checkout-back:hover {
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+}
+
+.review-block {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+.review-block-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.review-block-header span {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.review-edit-link {
+    background: none !important;
+    border: none !important;
+    color: #00e5b4 !important;
+    font-size: 0.78rem !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+    font-weight: 600 !important;
+    width: auto !important;
+}
+
+.review-edit-link:hover {
+    text-decoration: underline !important;
+}
+
+.review-block-text {
+    font-size: 0.92rem;
+    color: #fff;
+    line-height: 1.5;
+}
+
+/* Sticky Sidebar */
+.checkout-sidebar {
+    position: sticky;
+    top: 110px;
+}
+
+.checkout-sidebar-card {
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 20px;
+    padding: 26px;
+}
+
+.checkout-sidebar-items {
+    max-height: 360px;
+    overflow-y: auto;
+    margin: 16px 0 20px;
+    padding-right: 4px;
+}
+
+.checkout-sidebar-item {
+    display: flex;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.checkout-sidebar-item:last-child {
+    border-bottom: none;
+}
+
+.checkout-sidebar-item-info {
+    flex-grow: 1;
+}
+
+.checkout-sidebar-item-info h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.86rem;
+    margin-bottom: 4px;
+    line-height: 1.3;
+}
+
+.checkout-sidebar-item-info .price {
+    color: #00e5b4;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.checkout-sidebar-item-info .cart-item-qty {
+    margin-top: 8px;
+    width: fit-content;
+}
+
+.checkout-sidebar-totals {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 18px;
+}
+
+.checkout-total-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 10px;
+}
+
+.checkout-total-row .free-tag {
+    color: #00e5b4;
+    font-weight: 700;
+}
+
+.checkout-total-row.grand {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.25rem;
+    color: #fff;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.checkout-total-row.grand span:last-child {
+    color: #00e5b4;
+    font-weight: 800;
+}
+
+.checkout-empty-state {
+    text-align: center;
+    padding: 30px 0 10px;
+}
+
+/* ============================================================
+   17. CART TOAST NOTIFICATION
+   ============================================================ */
+.cart-toast {
+    position: fixed;
+    bottom: 100px; /* Shifted up to clear the chat bubble completely */
+    right: 26px;   /* Aligned with the chat bubble's horizontal position */
+    background: rgba(15, 15, 15, 0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 229, 180, 0.3);
+    border-radius: 14px;
+    padding: 14px 22px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cart-toast.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.toast-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #00e5b4;
+    box-shadow: 0 0 8px rgba(0, 229, 180, 0.8);
+    flex-shrink: 0;
+}
+
+/* ============================================================
+   18. ACCOUNT DASHBOARD (settings.html) - Sidebar Nav
+   ============================================================ */
+.account-shell {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 40px;
+    align-items: start;
+    width: 100%;
+}
+
+.account-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    position: sticky;
+    top: 110px;
+}
+
+.account-sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.account-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(0, 229, 180, 0.12);
+    border: 1px solid rgba(0, 229, 180, 0.3);
+    color: #00e5b4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.account-sidebar-header h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem;
+    margin-bottom: 2px;
+}
+
+.account-sidebar-header span {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+    word-break: break-all;
+}
+
+.account-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.account-nav-item {
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 12px 14px;
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.55);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.account-nav-item:hover {
+    background: rgba(255, 255, 255, 0.04);
+    color: #fff;
+}
+
+.account-nav-item.active {
+    background: rgba(0, 229, 180, 0.1);
+    color: #00e5b4;
+    font-weight: 700;
+}
+
+.account-signout-btn {
+    width: 100%;
+    text-align: center;
+}
+
+.account-content {
+    min-width: 0;
+}
+
+.account-panel {
+    display: none;
+    animation: fadeStepIn 0.35s ease;
+}
+
+.account-panel.active {
+    display: block;
+}
+
+.account-panel-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+}
+
+.order-history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.order-history-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.order-history-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 14px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.order-history-item-header .order-date {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.order-history-item-header .order-total {
+    font-family: 'Syne', sans-serif;
+    color: #00e5b4;
+    font-weight: 800;
+    font-size: 1.05rem;
+}
+
+.order-history-products {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.order-history-product-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.order-history-product-row span:last-child {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.order-history-empty {
+    text-align: center;
+    padding: 30px 0;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.9rem;
+}
+
+@media (max-width: 760px) {
+    .account-shell {
+        grid-template-columns: 1fr;
+    }
+    .account-sidebar {
+        position: relative;
+        top: 0;
+    }
+    .account-nav {
+        flex-direction: row;
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 860px) {
+    .checkout-layout {
+        grid-template-columns: 1fr;
+    }
+    .checkout-sidebar {
+        position: relative;
+        top: 0;
+        order: -1;
+        margin-bottom: 35px;
+    }
+    .checkout-field-row,
+    .checkout-field-row.three {
+        grid-template-columns: 1fr;
+    }
+    .step-line {
+        width: 32px;
+    }
+    .step-label {
+        font-size: 0.62rem;
+    }
+}
+/* ============================================================
+   19. HOMEPAGE REDESIGN — Revival Pulse Motif
+   ============================================================ */
+
+/* --- Signature Element: Intake Ticker (always visible, no JS required) --- */
+.intake-ticker {
+    width: 100%;
+    overflow: hidden;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.015);
+    padding: 16px 0;
+    margin-bottom: 90px;
+}
+
+.intake-track {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    animation: tickerScroll 26s linear infinite;
+}
+
+.intake-track span {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+    padding: 0 14px;
+    white-space: nowrap;
+}
+
+.intake-track .dot {
+    color: #00e5b4;
+    font-family: 'Inter', sans-serif;
+}
+
+@keyframes tickerScroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
+/* --- Diagnostics Strip --- */
+.diagnostics-strip {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 0;
+    max-width: 900px;
+    margin: 30px auto 100px;
+    padding: 0 24px;
+}
+
+.diagnostic-stat {
+    flex: 1;
+    text-align: center;
+    padding: 0 30px;
+    position: relative;
+}
+
+.diagnostic-stat + .diagnostic-stat::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10%;
+    height: 80%;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.diagnostic-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #00e5b4;
+    margin: 0 auto 14px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.diagnostic-value {
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    color: #fff;
+    letter-spacing: -0.02em;
+}
+
+.diagnostic-label {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.4);
+    margin-top: 8px;
+}
+
+/* --- Repair Log (redesigned story timeline) --- */
+.repair-log {
+    padding: 40px 40px 130px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.repair-log-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.repair-log-header .plan-tag {
+    margin: 0 auto 16px;
+}
+
+.repair-log-heading {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+.repair-log-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+}
+
+.repair-ticket {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed rgba(255, 255, 255, 0.14);
+    border-radius: 14px;
+    padding: 32px 24px 28px;
+    position: relative;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, background 0.3s ease;
+}
+
+.repair-ticket:hover {
+    transform: translateY(-8px);
+    border-color: rgba(0, 229, 180, 0.4);
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.repair-ticket::before,
+.repair-ticket::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 18px;
+    height: 18px;
+    background: #0a0a0a;
+    border-radius: 50%;
+    transform: translateY(-50%);
+}
+
+.repair-ticket::before { left: -9px; }
+.repair-ticket::after { right: -9px; }
+
+.ticket-number {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #00e5b4;
+    margin-bottom: 16px;
+}
+
+.repair-ticket p {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 400;
+    line-height: 1.45;
+    color: #e0e0e0;
+    letter-spacing: -0.01em;
+}
+
+.repair-ticket p em {
+    font-style: normal;
+    background: linear-gradient(135deg, #00e5b4, #00c4f4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* --- Process Section --- */
+.process-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 40px 140px;
+}
+
+.process-header {
+    text-align: center;
+    margin-bottom: 70px;
+}
+
+.process-header .plan-tag {
+    margin: 0 auto 16px;
+}
+
+.process-steps {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.process-step {
+    flex: 1;
+    max-width: 240px;
+    text-align: center;
+    padding: 0 10px;
+}
+
+.process-node {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 229, 180, 0.4);
+    background: rgba(0, 229, 180, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    color: #00e5b4;
+    box-shadow: 0 0 20px rgba(0, 229, 180, 0.15);
+}
+
+.process-step h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.process-step p {
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.45);
+    line-height: 1.6;
+    font-weight: 300;
+}
+
+.process-connector {
+    flex: 0 0 auto;
+    width: 60px;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 229, 180, 0.5) 50%, transparent 50%);
+    background-size: 8px 1px;
+    margin-top: 24px;
+}
+
+/* --- Closing CTA Banner --- */
+.cta-banner {
+    position: relative;
+    max-width: 720px;
+    margin: 0 auto 100px;
+    padding: 80px 40px;
+    text-align: center;
+    overflow: hidden;
+}
+
+.cta-banner-heading {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+    margin: 0 0 18px;
+    position: relative;
+    z-index: 2;
+}
+
+.cta-banner-text {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.45);
+    max-width: 420px;
+    margin: 0 auto 30px;
+    line-height: 1.8;
+    font-weight: 300;
+    position: relative;
+    z-index: 2;
+}
+
+.cta-banner .cta-group {
+    position: relative;
+    z-index: 2;
+}
+
+/* --- Responsive --- */
+@media (max-width: 900px) {
+    .repair-log-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .diagnostics-strip {
+        flex-wrap: wrap;
+        gap: 30px 0;
+    }
+    .diagnostic-stat {
+        flex: 1 1 45%;
+    }
+    .diagnostic-stat + .diagnostic-stat::before {
+        display: none;
+    }
+    .process-steps {
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+    }
+    .process-connector {
+        width: 1px;
+        height: 30px;
+        background-image: linear-gradient(to bottom, rgba(0, 229, 180, 0.5) 50%, transparent 50%);
+        background-size: 1px 8px;
+        margin: 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .repair-log-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================================
+   20. AI STORE ASSISTANT CHAT WIDGET
+   ============================================================ */
+.chat-widget {
+    position: fixed;
+    bottom: 26px;
+    right: 26px;
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+}
+
+/* Tooltip prompt next to FAB to avoid confusion */
+.chat-widget::before {
+    content: "Ask RDX AI";
+    position: absolute;
+    right: 72px;
+    background: rgba(15, 15, 15, 0.92);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #00e5b4;
+    white-space: nowrap;
+    pointer-events: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    opacity: 1;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    letter-spacing: 0.5px;
+    animation: tooltipFloat 3s ease-in-out infinite alternate;
+}
+
+/* Soft floating animation for the text badge */
+@keyframes tooltipFloat {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-5px);
+    }
+}
+
+/* Hide tooltip when chat panel is open */
+.chat-widget:has(.chat-panel.active)::before {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Let the cart drawer (and other overlays) take full visual priority —
+   the chat bubble/panel steps out of the way instead of overlapping them. */
+body:has(.cart-drawer.active) .chat-widget,
+body:has(.signin-drawer.active) .chat-widget,
+body:has(.specs-modal.active) .chat-widget {
+    display: none;
+}
+
+/* Enhanced chat button with custom gradient and glowing breathe state */
+.chat-fab {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00e5b4, #00b8d9);
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 0 0 0 rgba(0, 229, 180, 0.4), 0 8px 24px rgba(0, 229, 180, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #06120e;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: fabBreathe 2.5s infinite;
+}
+
+.chat-fab-icon {
+    width: 23px;
+    height: 23px;
+}
+
+.chat-fab:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 0 10px transparent, 0 12px 30px rgba(0, 229, 180, 0.45);
+}
+
+/* Subtle, non-intrusive attention getter */
+@keyframes fabBreathe {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 229, 180, 0.4), 0 8px 24px rgba(0, 229, 180, 0.3);
+    }
+    70% {
+        box-shadow: 0 0 0 12px rgba(0, 229, 180, 0), 0 8px 24px rgba(0, 229, 180, 0.3);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 229, 180, 0), 0 8px 24px rgba(0, 229, 180, 0.3);
+    }
+}
+
+.chat-panel {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    bottom: 74px;
+    right: 0;
+    width: 340px;
+    height: 460px;
+    background: rgba(15, 15, 15, 0.98);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 229, 180, 0.04);
+    overflow: hidden;
+}
+
+.chat-panel.active {
+    display: flex;
+}
+
+.chat-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background: linear-gradient(180deg, rgba(0, 229, 180, 0.05), transparent);
+}
+
+.chat-header-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.chat-header-avatar {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    border-radius: 11px;
+    background: linear-gradient(135deg, rgba(0, 229, 180, 0.16), rgba(0, 184, 217, 0.1));
+    border: 1px solid rgba(0, 229, 180, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #00e5b4;
+}
+
+.chat-header-avatar svg {
+    width: 18px;
+    height: 18px;
+}
+
+.chat-panel-header h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+}
+
+.chat-status {
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.chat-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #00e5b4;
+    box-shadow: 0 0 0 0 rgba(0, 229, 180, 0.5);
+    animation: chatStatusPulse 2.4s infinite;
+}
+
+@keyframes chatStatusPulse {
+    0% { box-shadow: 0 0 0 0 rgba(0, 229, 180, 0.5); }
+    70% { box-shadow: 0 0 0 5px rgba(0, 229, 180, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 229, 180, 0); }
+}
+
+.chat-close-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.45);
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.chat-close-btn svg {
+    width: 15px;
+    height: 15px;
+}
+
+.chat-close-btn:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.chat-msg {
+    max-width: 85%;
+    padding: 10px 14px;
+    border-radius: 14px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.chat-msg-bot {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: #eee;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+}
+
+.chat-msg-user {
+    background: rgba(0, 229, 180, 0.12);
+    border: 1px solid rgba(0, 229, 180, 0.2);
+    color: #fff;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+
+.chat-msg-loading {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 14px 16px;
+}
+
+.typing-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.45);
+    animation: typingBounce 1.2s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.typing-dot:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+@keyframes typingBounce {
+    0%, 60%, 100% {
+        transform: translateY(0);
+        opacity: 0.4;
+    }
+    30% {
+        transform: translateY(-4px);
+        opacity: 1;
+    }
+}
+
+.chat-input-row {
+    display: flex;
+    gap: 8px;
+    padding: 14px 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.chat-input-row input {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 10px 12px;
+    color: #fff;
+    font-size: 0.83rem;
+    font-family: 'Inter', sans-serif;
+}
+
+.chat-input-row input:focus {
+    outline: none;
+    border-color: #00e5b4;
+}
+
+.chat-send-btn {
+    background: linear-gradient(135deg, #00e5b4, #00b8d9);
+    color: #06120e;
+    border: none;
+    border-radius: 10px;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chat-send-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.chat-send-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0, 229, 180, 0.35);
+}
+
+@media (max-width: 480px) {
+    .chat-panel {
+        width: calc(100vw - 40px);
+        height: min(70vh, 460px);
+    }
+
+    .chat-widget::before {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 720px) {
+    .main-nav {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        gap: 10px;
+        padding: 14px 16px;
+    }
+
+    .main-nav > div:first-child {
+        display: none;
+    }
+
+    .main-nav > div:last-of-type {
+        justify-self: center;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .nav-center-pill {
+        max-width: 100%;
+        overflow-x: auto;
+        gap: 14px;
+        padding: 8px 16px;
+        scrollbar-width: none;
+    }
+
+    .nav-center-pill::-webkit-scrollbar {
+        display: none;
+    }
+
+    .hero-glow {
+        max-width: 100vw;
+        overflow: hidden;
+    }
+
+    .gallery-filters {
+        flex-wrap: wrap;
+        padding: 0 8px;
+    }
+
+    .hero,
+    .services-hero,
+    .gallery-header {
+        padding-top: 170px;
+    }
+
+    .contact-hero,
+    .checkout-page-container,
+    .register-container,
+    .settings-container {
+        padding-top: 170px !important;
+    }
+
+    .contact-container,
+    .checkout-card-layout,
+    .register-card,
+    .settings-card {
+        padding: 32px 22px !important;
+        border-radius: 20px !important;
+    }
+
+    .form-row,
+    .cta-group {
+        flex-direction: column;
+    }
+
+    .services-grid,
+    .specs-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .specs-modal-content {
+        max-height: calc(100vh - 40px);
+        overflow-y: auto;
+        padding: 28px 20px;
+    }
+
+    .cart-drawer {
+        right: 0 !important;
+        width: min(100vw, 400px) !important;
+        transform: translateX(100%) !important;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                    opacity 0.3s ease,
+                    visibility 0.3s ease !important;
+    }
+
+    .cart-drawer:not(.active),
+    .signin-drawer:not(.active) {
+        display: none !important;
+    }
+
+    .cart-drawer.active {
+        display: flex !important;
+        right: 0 !important;
+        transform: translateX(0) !important;
+    }
+
+    .signin-drawer {
+        right: 16px !important;
+        width: calc(100vw - 32px) !important;
+        transform: translateX(calc(100% + 16px)) !important;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                    opacity 0.3s ease,
+                    visibility 0.3s ease !important;
+    }
+
+    .signin-drawer.active {
+        display: flex !important;
+        right: 16px !important;
+        transform: translateX(0) !important;
+    }
+}
+
+/* Hide helper text on narrow screens to protect viewport space */
+@media (max-width: 480px) {
+    .chat-widget::before {
+        display: none !important;
+    }
+}
+
+/* ============================================================
+   21. STRIPE INPUT FOCUS AND CONTAINER BINDINGS
+   ============================================================ */
+.stripe-input-container--focus {
+    border-color: #00e5b4 !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+    box-shadow: 0 0 15px rgba(0, 229, 180, 0.1) !important;
 }

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Your Shipment | RDX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="/images_copy/logo.svg">
+    <style>
+        .tracking-container {
+            min-height: calc(100vh - 200px);
+            padding: 140px 24px 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .tracking-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            width: 100%;
+            max-width: 600px;
+            border-radius: 28px;
+            padding: 50px;
+        }
+        /* Visual timeline styling */
+        .timeline-wrapper {
+            margin-top: 40px;
+            display: none; /* Shown dynamically via JS */
+            animation: fadeIn 0.4s ease;
+        }
+        .timeline-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-bottom: 30px;
+        }
+        .timeline-bar {
+            position: absolute;
+            top: 15px;
+            left: 5%;
+            right: 5%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 1;
+        }
+        .timeline-progress-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: #00e5b4;
+            width: 0%; /* Adjusted via JS */
+            transition: width 0.8s ease;
+        }
+        .timeline-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+        .timeline-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #141414;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+        .timeline-step.active .timeline-dot {
+            border-color: #00e5b4;
+            background: #00e5b4;
+            color: #0a0a0a;
+            box-shadow: 0 0 15px rgba(0, 229, 180, 0.4);
+        }
+        .timeline-step.complete .timeline-dot {
+            border-color: #00e5b4;
+            background: rgba(0, 229, 180, 0.15);
+            color: #00e5b4;
+        }
+        .timeline-label {
+            font-size: 0.68rem;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 10px;
+            text-align: center;
+        }
+        .timeline-step.active .timeline-label {
+            color: #fff;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="main-nav">
+        <div></div>
+        <ul class="nav-center-pill">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#story">Our Story</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="store.html">Store</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <a href="#" class="nav-signin nav-cart-btn">Cart (<span id="cart-count">0</span>)</a>
+            <a href="#" class="nav-signin" id="navProfileBtn" onclick="handleProfileNavClick(event)">Sign In</a>
+        </div>
+    </nav>
+
+    <div class="tracking-container">
+        <div class="hero-glow"></div>
+        <div class="tracking-card reveal">
+            <h2 style="font-family:'Syne', sans-serif; font-size:2.2rem; margin-bottom:8px; text-align: center;">Track Shipment</h2>
+            <p style="color:rgba(255,255,255,0.4); font-size:0.88rem; margin-bottom:30px; text-align: center;">Enter your USPS Tracking Number or Order ID below.</p>
+            
+            <div class="checkout-field" style="margin-bottom: 20px;">
+                <input type="text" id="trackingQuery" placeholder="e.g. USPS9400100000000000000000" style="text-align: center; font-family: 'Space Mono', monospace;">
+            </div>
+
+            <button class="btn-checkout-submit" onclick="findShipment()" style="width: 100%;">Locate Shipment</button>
+
+            <!-- Visual Timeline Status (Injected via JS) -->
+            <div id="timelineWrapper" class="timeline-wrapper">
+                <div class="stock-badge" style="margin: 0 auto 25px; display: flex;">
+                    <div class="stock-dot"></div>
+                    <span id="shipmentStatusText">In Transit</span>
+                </div>
+
+                <div class="timeline-steps">
+                    <div class="timeline-bar">
+                        <div class="timeline-progress-fill" id="timelineProgressFill"></div>
+                    </div>
+                    
+                    <div class="timeline-step" id="step1">
+                        <div class="timeline-dot">1</div>
+                        <span class="timeline-label">Processed</span>
+                    </div>
+                    <div class="timeline-step" id="step2">
+                        <div class="timeline-dot">2</div>
+                        <span class="timeline-label">Received</span>
+                    </div>
+                    <div class="timeline-step" id="step3">
+                        <div class="timeline-dot">3</div>
+                        <span class="timeline-label">In Transit</span>
+                    </div>
+                    <div class="timeline-step" id="step4">
+                        <div class="timeline-dot">4</div>
+                        <span class="timeline-label">Delivered</span>
+                    </div>
+                </div>
+
+                <div class="review-block" style="text-align: center; padding: 20px; background: rgba(255,255,255,0.01);">
+                    <h4 style="font-family: 'Syne', sans-serif; font-size: 0.95rem; margin-bottom: 6px;">Carrier: USPS</h4>
+                    <p style="font-size: 0.8rem; color: rgba(255,255,255,0.45); line-height: 1.5; margin-bottom: 15px;">Your package is moving within the USPS system network.</p>
+                    <a href="#" id="uspsDirectLink" target="_blank" class="btn-primary" style="display: inline-block; text-decoration: none; padding: 10px 20px; font-size: 0.8rem;">Open in USPS website</a>
+                </div>
+            </div>
+
+            <!-- Error State -->
+            <div id="trackingError" style="display: none; color: #ff7a00; font-size: 0.85rem; text-align: center; margin-top: 25px; animation: fadeIn 0.3s ease;">
+                Unable to locate a shipment matching that tracking format.
+            </div>
+        </div>
+    </div>
+
+    <footer class="trademark">
+        <div class="tm-left"><div class="tm-dot"></div>RDX Technologies</div>
+        <div class="tm-center">© 2025 RDX Technologies™ · All rights reserved.</div>
+        <div class="tm-right">Designed with precision.</div>
+    </footer>
+
+    <!-- Firebase SDK Libraries (Ensures database connection is online on this page) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Your main script -->
+    <script src="/Js_on/script.js"></script>
+</body>
+</html>

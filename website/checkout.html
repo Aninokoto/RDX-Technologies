@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="style.css">
     <!-- This line loads your logo.svg in your browser tab, but keeps it hidden on the page -->
     <link rel="icon" type="image/svg+xml" href="/images_copy/logo.svg">
+    <script src="https://js.stripe.com/v3/"></script>
 </head>
 
     <style>
@@ -125,37 +126,42 @@
                                 </div>
                             </div>
 
-                            <!-- STEP 2: PAYMENT -->
-                            <div class="checkout-step-panel" id="stepPanel2">
-                                <h4 class="step-panel-heading">Payment Method</h4>
-                                <div class="checkout-field">
-                                    <label for="checkoutEmail">Email Address</label>
-                                    <input type="email" id="checkoutEmail" required placeholder="john@example.com">
-                                </div>
-                                <div class="checkout-field">
-                                    <label for="checkoutName">Name on Card</label>
-                                    <input type="text" id="checkoutName" required placeholder="John Doe">
-                                </div>
-                                <div class="checkout-field">
-                                    <label for="checkoutCard">Mock Card Number</label>
-                                    <input type="text" id="checkoutCard" required placeholder="4111 2222 3333 4444" pattern="[0-9\s]{13,19}">
-                                </div>
-                                <div class="checkout-field-row">
-                                    <div class="checkout-field">
-                                        <label for="checkoutExpiry">Expiry Date</label>
-                                        <input type="text" id="checkoutExpiry" required placeholder="MM/YY">
-                                    </div>
-                                    <div class="checkout-field">
-                                        <label for="checkoutCVV">CVV</label>
-                                        <input type="text" id="checkoutCVV" required placeholder="123" maxlength="4">
-                                    </div>
-                                </div>
+                           <!-- STEP 2: PAYMENT -->
+<div class="checkout-step-panel" id="stepPanel2">
+    <h4 class="step-panel-heading">Payment Method</h4>
+    <div class="checkout-field">
+        <label for="checkoutEmail">Email Address</label>
+        <input type="email" id="checkoutEmail" required placeholder="john@example.com">
+    </div>
+    <div class="checkout-field">
+        <label for="checkoutName">Name on Card</label>
+        <input type="text" id="checkoutName" required placeholder="John Doe">
+    </div>
+    
+    <!-- Stripe Card Number Placeholder -->
+    <div class="checkout-field">
+        <label>Card Number</label>
+        <div id="stripe-card-number" class="stripe-input-container"></div>
+    </div>
+    
+    <div class="checkout-field-row">
+        <!-- Stripe Expiry Placeholder -->
+        <div class="checkout-field">
+            <label>Expiry Date</label>
+            <div id="stripe-card-expiry" class="stripe-input-container"></div>
+        </div>
+        <!-- Stripe CVC Placeholder -->
+        <div class="checkout-field">
+            <label>CVV</label>
+            <div id="stripe-card-cvc" class="stripe-input-container"></div>
+        </div>
+    </div>
 
-                                <div class="checkout-step-actions split">
-                                    <button type="button" class="btn-checkout-back" onclick="goToStep(1)">Back</button>
-                                    <button type="button" class="btn-checkout-submit" onclick="goToStep(3)">Review Order</button>
-                                </div>
-                            </div>
+    <div class="checkout-step-actions split">
+        <button type="button" class="btn-checkout-back" onclick="goToStep(1)">Back</button>
+        <button type="button" class="btn-checkout-submit" onclick="goToStep(3)">Review Order</button>
+    </div>
+</div>
 
                             <!-- STEP 3: REVIEW -->
                             <div class="checkout-step-panel" id="stepPanel3">
