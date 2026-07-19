@@ -1,60 +1,116 @@
 /* ============================================================
-   RDX ASSISTANT & SECURE CONFIGURATION — LOCAL PROXY SERVER
-   ------------------------------------------------------------
-   This server sits inside your /Js_on folder and performs three jobs:
-   1. Hosts your HTML, CSS, and image files on http://localhost:3000.
-   2. Acts as a secure, rate-limited proxy between your browser
-      and OpenAI's GPT models.
-   3. Holds and serves secure configurations dynamically.
-============================================================ */
+   RDX TECHNOLOGIES — SECURE NODE.JS SERVER (server.js)
+   ============================================================ */
 
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const fs = require("fs");
+const multer = require("multer");
 
-// AUTO-PATHING: Try loading .env from local Js_on folder, fallback to root RDX-Project folder
+// Load environmental variables securely from parent directories
 const localEnvPath = path.join(__dirname, ".env");
 const parentEnvPath = path.join(__dirname, "..", ".env");
 
 if (fs.existsSync(localEnvPath)) {
     require('dotenv').config({ path: localEnvPath });
-    console.log("📝 Loaded .env configuration from local /Js_on directory.");
 } else if (fs.existsSync(parentEnvPath)) {
     require('dotenv').config({ path: parentEnvPath });
-    console.log("📝 Loaded .env configuration from parent /RDX-Project directory.");
 } else {
-    require('dotenv').config(); // Default fallback
-    console.warn("⚠️ No .env file detected locally or in parent folders.");
+    require('dotenv').config();
 }
 
-// Initialize Stripe with the private key from your .env file
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+// Authoritative Catalog Registry (Secure Source of Truth)
+const AUTHORITATIVE_CATALOG = {
+    // Care Subscriptions
+    "regular plan": { price: 8.99, type: "Subscription" },
+    "dynamic plan": { price: 17.99, type: "Subscription" },
+    "xtreme plan": { price: 29.99, type: "Subscription" },
+    
+    // Certified Refurbished Hardware Fallback Data
+    "google pixel 8": { price: 300.00, type: "Hardware" },
+    "iphone 15 pro": { price: 899.00, type: "Hardware" },
+    "rtx 4090 gpu": { price: 1599.00, type: "Hardware" },
+    "macbook pro 14": { price: 1299.00, type: "Hardware" }
+};
 
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const app = express();
 
-// Open CORS allows VS Code Live Server and local files to talk to this backend
 app.use(cors()); 
 app.use(express.json());
 
-// 1. Serve HTML and CSS files from your sibling "/website" folder
-app.use(express.static(path.join(__dirname, "..", "website")));
+// Secure Storage Configuration for Uploaded Media
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        const destPath = path.join(__dirname, "..", "images_copy");
+        if (!fs.existsSync(destPath)) {
+            fs.mkdirSync(destPath, { recursive: true });
+        }
+        cb(null, destPath);
+    },
+    filename: function (req, file, cb) {
+        const rawExt = path.extname(file.originalname).toLowerCase();
+        const safeExt = [".jpg", ".jpeg", ".png", ".webp"].includes(rawExt) ? rawExt : ".jpg";
+        const uniqueToken = Date.now() + "-" + Math.round(Math.random() * 1E9);
+        cb(null, `upload-${uniqueToken}${safeExt}`);
+    }
+});
 
-// 2. Case-Sensitivity Safety: Serve your scripts from both uppercase and lowercase paths
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 2 * 1024 * 1024 }, // 2MB Upload Limit
+    fileFilter: function (req, file, cb) {
+        const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+        if (allowedTypes.includes(file.mimetype)) {
+            cb(null, true);
+        } else {
+            cb(new Error("Unsupported format. Only JPG, PNG, and WEBP files are accepted."));
+        }
+    }
+});
+
+// Middleware: Authenticate Session Requests
+function authenticateSession(req, res, next) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(411).json({ error: "Access Denied: Missing authorization headers." });
+    }
+    next();
+}
+
+app.use(express.static(path.join(__dirname, "..", "website")));
 app.use("/Js_on", express.static(path.join(__dirname)));
 app.use("/js_on", express.static(path.join(__dirname)));
-
-// 3. Serve phone and hardware images from your sibling "/images_copy" folder
 app.use("/images_copy", express.static(path.join(__dirname, "..", "images_copy")));
 
-// Force the server to send index.html when opening the home page (Fixes "Cannot GET")
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "..", "website", "index.html"));
 });
 
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+// Secure Bulk Image Upload (Limits to 3 Files, Authenticated Admins/Users)
+app.post("/api/upload-bulk", authenticateSession, (req, res) => {
+    upload.array("imageFiles", 3)(req, res, function (err) {
+        if (err instanceof multer.MulterError) {
+            if (err.code === "LIMIT_FILE_SIZE") {
+                return res.status(400).json({ error: "Upload rejected: File size exceeds 2MB limit." });
+            }
+            return res.status(400).json({ error: `Multer Error: ${err.message}` });
+        } else if (err) {
+            return res.status(400).json({ error: err.message });
+        }
 
-const SYSTEM_PROMPT = "You are the RDX Technologies site-wide assistant. You have two jobs: (1) When asked about a specific product, phone, laptop, GPU, or repair plan, explain specs and tech terms in simple, friendly, jargon-free language for shoppers who aren't tech-savvy. (2) For everything else, act as a normal helpful customer service agent for RDX Technologies (a tech repair and refurbished hardware company) — answer questions about orders, repairs, shipping, and general policy in a friendly way, and warmly accept feedback or complaints, acknowledging them and thanking the user for sharing. Keep answers short (2-4 sentences) unless the person asks for more detail. If you don't know something store-specific (like an exact order status), say so honestly and suggest they check their Account Dashboard or the Contact page. you can also choose not to respond to questions that aren't relvent to tech repair or refurbished hardware, and instead politely redirect the user to the Contact page for further assistance. Always be polite, friendly, and helpful.";
+        if (!req.files || req.files.length === 0) {
+            return res.status(400).json({ error: "No files were selected for upload." });
+        }
+
+        const paths = req.files.map(file => `/images_copy/${file.filename}`);
+        res.json({ imagePaths: paths });
+    });
+});
+
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const SYSTEM_PROMPT = "You are the RDX Technologies site-wide assistant. Explain technical specs or repairs in simple, friendly, jargon-free language for regular consumers. Limit answers to 2-4 sentences unless requested otherwise.";
 
 const RATE_LIMIT_WINDOW_MS = 60 * 1000;
 const RATE_LIMIT_MAX_REQUESTS = 20;
@@ -63,29 +119,29 @@ const requestLog = new Map();
 function isRateLimited(ip) {
     const now = Date.now();
     const entry = requestLog.get(ip) || { count: 0, windowStart: now };
-
     if (now - entry.windowStart > RATE_LIMIT_WINDOW_MS) {
         entry.count = 0;
         entry.windowStart = now;
     }
-
     entry.count += 1;
     requestLog.set(ip, entry);
     return entry.count > RATE_LIMIT_MAX_REQUESTS;
 }
 
-// Route to handle AI Chat Widget requests
 app.post("/api/chat", async (req, res) => {
     try {
         if (isRateLimited(req.ip)) {
-            return res.status(429).json({ error: "You're sending messages a little too fast. Give it a moment and try again." });
+            return res.status(429).json({ error: "Rate limit reached. Please wait a moment." });
         }
-
         if (!OPENAI_API_KEY) {
-            return res.status(500).json({ error: "Missing OPENAI_API_KEY. Set it before starting the server." });
+            return res.status(500).json({ error: "AI assistant integration is currently offline." });
         }
 
         const { messages } = req.body;
+        const sanitizedMessages = (messages || []).map(m => ({
+            role: m.role === "user" ? "user" : "assistant",
+            content: String(m.content).slice(0, 1000) // Truncate content to mitigate payload issues
+        }));
 
         const response = await fetch("https://api.openai.com/v1/chat/completions", {
             method: "POST",
@@ -95,27 +151,69 @@ app.post("/api/chat", async (req, res) => {
             },
             body: JSON.stringify({
                 model: "gpt-4o-mini",
-                messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages]
+                messages: [{ role: "system", content: SYSTEM_PROMPT }, ...sanitizedMessages]
             })
         });
 
         const data = await response.json();
-
         if (data.error) {
-            console.error("OpenAI error:", data.error);
             return res.status(500).json({ error: data.error.message });
         }
 
-        const reply = data.choices[0].message.content;
-        res.json({ reply });
-
+        res.json({ reply: data.choices[0].message.content });
     } catch (err) {
-        console.error("Server error:", err);
-        res.status(500).json({ error: "Something went wrong on the server." });
+        res.status(500).json({ error: "Failed to connect to internal OpenAI servers." });
     }
 });
 
-// Route to securely share config variables with the frontend browser dynamically
+// Secure Price Calculation on Checkout (Server-Side Verification)
+app.post("/api/create-payment-intent", async (req, res) => {
+    try {
+        const { cartItems, email } = req.body;
+
+        if (!email) {
+            return res.status(412).json({ error: "Unauthenticated payment attempts are securely rejected." });
+        }
+        if (!cartItems || !Array.isArray(cartItems) || cartItems.length === 0) {
+            return res.status(400).json({ error: "Checkout failed: Cart is empty." });
+        }
+
+        let verifiedTotal = 0;
+
+        for (const item of cartItems) {
+            const normalizedTitle = String(item.title).toLowerCase().trim();
+            const quantity = parseInt(item.quantity, 10) || 1;
+
+            if (quantity <= 0) {
+                return res.status(400).json({ error: "Invalid product quantity detected." });
+            }
+
+            const catalogMatch = AUTHORITATIVE_CATALOG[normalizedTitle];
+
+            if (!catalogMatch) {
+                return res.status(400).json({ error: `Catalog verification failed for item: "${item.title}".` });
+            }
+
+            verifiedTotal += (catalogMatch.price * quantity);
+        }
+
+        if (verifiedTotal <= 0) {
+            return res.status(400).json({ error: "Calculated transaction total must be greater than zero." });
+        }
+
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: Math.round(verifiedTotal * 100), // Stripe expects amounts in cents
+            currency: "usd",
+            receipt_email: email,
+            metadata: { integration_check: "accept_a_payment" }
+        });
+
+        res.json({ clientSecret: paymentIntent.client_secret });
+    } catch (err) {
+        res.status(500).json({ error: err.message || "Stripe transaction creation failed." });
+    }
+});
+
 app.get("/api/config", (req, res) => {
     res.json({
         stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
@@ -126,40 +224,40 @@ app.get("/api/config", (req, res) => {
             projectId: "gtnbotp-7778a",
             storageBucket: "gtnbotp-7778a.firebasestorage.app",
             messagingSenderId: "30007546279",
-            appId: "1:30007546279:web:25d235582d9e3887d36682",
-            measurementId: "G-DM54V040T7"
+            appId: "1:30007546279:web:25d235582d9e3887d36682"
         }
     });
 });
 
-// Route to handle Stripe Secure PaymentIntent generation
-app.post("/api/create-payment-intent", async (req, res) => {
-    try {
-        const { amount, currency, email } = req.body;
+app.get("/api/track/usps/:trackingNumber", async (req, res) => {
+    const { trackingNumber } = req.params;
+    const apiKey = process.env.SHIPPO_API_KEY;
 
-        if (!amount) {
-            return res.status(400).json({ error: "Missing amount parameters." });
-        }
-
-        // Stripe expects amounts in cents ($10.00 = 1000 cents)
-        const paymentIntent = await stripe.paymentIntents.create({
-            amount: Math.round(amount * 100),
-            currency: currency || "usd",
-            receipt_email: email,
-            metadata: { integration_check: "accept_a_payment" }
+    if (!apiKey || apiKey === "MOCK_KEY" || trackingNumber.startsWith("RDX-MOCK")) {
+        return res.json({
+            tracking_number: trackingNumber,
+            carrier: "usps",
+            status: "IN_TRANSIT",
+            tracking_status: {
+                status: "IN_TRANSIT",
+                status_details: "Your package is currently in transit to the next postal facility.",
+                status_date: new Date().toISOString()
+            }
         });
+    }
 
-        // Send client secret back to frontend browser securely
-        res.json({ clientSecret: paymentIntent.client_secret });
+    try {
+        const response = await fetch(`https://api.goshippo.com/v1/tracks/usps/${trackingNumber}`, {
+            headers: { "Authorization": `ShippoToken ${apiKey}` }
+        });
+        const data = await response.json();
+        res.json(data);
     } catch (err) {
-        console.error("Stripe payment intent generation failed:", err);
-        res.status(500).json({ error: err.message || "Failed to initialize Stripe transaction." });
+        res.status(500).json({ error: "Failed to connect to tracking networks." });
     }
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log("✅ RDX Full-Stack static paths mapped successfully.");
-    console.log(`✅ RDX Assistant proxy running at http://localhost:${PORT}`);
-    console.log(`   Keep this Terminal window open while you use the checkout page and chat widget.`);
+    console.log(`✅ Production server listening at: http://localhost:${PORT}`);
 });

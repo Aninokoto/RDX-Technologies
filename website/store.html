@@ -6,9 +6,7 @@
     <title>Hardware Gallery | RDX</title>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="style.css">
-        <!-- This line loads your logo.svg in your browser tab, but keeps it hidden on the page -->
     <link rel="icon" type="image/svg+xml" href="/images_copy/logo.svg">
-</head>
 </head>
 <body>
 
@@ -22,9 +20,7 @@
             <li><a href="contact.html">Contact</a></li>
         </ul>
         <div style="display: flex; gap: 12px; align-items: center;">
-            <!-- Cart Button -->
-            <a href="#" class="nav-signin nav-cart-btn">Cart (<span id="cart-count">0</span>)</a>
-            <a href="#" class="nav-signin" id="navProfileBtn" onclick="handleProfileNavClick(event)">Sign In</a>
+            <a href="#" class="nav-signin nav-cart-btn" id="navProfileBtn" onclick="handleProfileNavClick(event)">Sign In</a>
         </div>
     </nav>
 
@@ -33,142 +29,72 @@
         <div class="header-content reveal"> 
             <span class="plan-tag">Hardware Gallery</span>
             <h1>Available Tech</h1>
+            <p style="color:rgba(255,255,255,0.45); font-size:0.9rem; margin-top:8px;">Source professionally certified refurb hardware and OEM components.</p>
         </div>
     </header>
 
-    <main class="store-layout">
-        <!-- Filter chips with categories -->
-        <div class="gallery-filters reveal"> 
-            <button class="filter-chip active" data-filter="all">All</button>
-            <button class="filter-chip" data-filter="smartphones">Smartphones</button>
-            <button class="filter-chip" data-filter="components">Components</button>
-            <button class="filter-chip" data-filter="laptops">Laptops</button>
-        </div>
+    <main class="store-layout" style="display: grid; grid-template-columns: 280px 1fr; gap: 40px; max-width: 1400px; margin: 0 auto; padding: 0 48px 100px;">
+        
+        <!-- Sidebar filters panel (Task 1 & 2 Overhauls) -->
+        <aside class="store-sidebar reveal">
+            <div class="store-sidebar-module">
+                <div>
+                    <h4 class="store-filter-title">Search Catalog</h4>
+                    <input type="text" id="storeSearchInput" class="filter-input-search" placeholder="Search by name, brand..." onkeyup="filterStoreCatalog()">
+                </div>
 
-        <div class="products-container">
+                <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;">
+                    <h4 class="store-filter-title">Category</h4>
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <label style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: rgba(255,255,255,0.6); cursor: pointer;">
+                            <input type="radio" name="catFilter" value="all" checked onclick="filterStoreCatalog()" style="width:auto; margin:0; accent-color:#00e5b4;"> All Products
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: rgba(255,255,255,0.6); cursor: pointer;">
+                            <input type="radio" name="catFilter" value="smartphones" onclick="filterStoreCatalog()" style="width:auto; margin:0; accent-color:#00e5b4;"> Smartphones
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: rgba(255,255,255,0.6); cursor: pointer;">
+                            <input type="radio" name="catFilter" value="components" onclick="filterStoreCatalog()" style="width:auto; margin:0; accent-color:#00e5b4;"> Components
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: rgba(255,255,255,0.6); cursor: pointer;">
+                            <input type="radio" name="catFilter" value="laptops" onclick="filterStoreCatalog()" style="width:auto; margin:0; accent-color:#00e5b4;"> Laptops
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Dual Input Manual Price Range Controls (Task 2) -->
+                <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;">
+                    <h4 class="store-filter-title">Price Range ($)</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <div>
+                            <label style="font-size:0.65rem; color:rgba(255,255,255,0.4); text-transform:uppercase; margin-bottom:4px; display:block; font-weight:600;">Min</label>
+                            <input type="number" id="minPriceInput" value="0" min="0" oninput="filterStoreCatalog()" style="padding:10px; font-size:0.8rem; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.08); border-radius:8px; color:#fff;">
+                        </div>
+                        <div>
+                            <label style="font-size:0.65rem; color:rgba(255,255,255,0.4); text-transform:uppercase; margin-bottom:4px; display:block; font-weight:600;">Max</label>
+                            <input type="number" id="maxPriceInput" value="2000" min="0" oninput="filterStoreCatalog()" style="padding:10px; font-size:0.8rem; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.08); border-radius:8px; color:#fff;">
+                        </div>
+                    </div>
+                </div>
+
+                <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; padding-bottom: 10px;">
+                    <h4 class="store-filter-title">Availability</h4>
+                    <label style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: rgba(255,255,255,0.6); cursor: pointer;">
+                        <input type="checkbox" id="excludeOosInput" onclick="filterStoreCatalog()" style="width:auto; margin:0; accent-color:#00e5b4;"> In Stock Only
+                    </label>
+                </div>
+
+                <button onclick="resetStoreFilters()" class="btn-reset-filters">Reset Filters</button>
+            </div>
+        </aside>
+
+        <!-- Catalog listing frames with scrolling reveals (Task 4 Animations) -->
+        <section style="display: flex; flex-direction: column; gap: 20px;">
+            <div id="catalogStatus" style="font-size:0.8rem; color:rgba(255,255,255,0.4); text-align: left; padding-left: 5px; font-weight: 500;"></div>
             
-            <!-- Card 1: iPhone 15 (Smartphones Category) -->
-            <div class="gallery-card reveal" data-category="smartphones">
-                <div class="gallery-image"><img src="../images_copy/iph15-front.png" alt="iPhone 15"></div>
-                <div class="gallery-info">
-                    <h3>iPhone 15</h3>
-                    <p class="price">$400</p>
-                    <div style="display: flex; gap: 8px; margin-top: 10px;">
-                        <button class="btn-view" style="padding: 8px; font-size: 0.75rem; flex: 1;" 
-                                onclick="openProductSpecs('iPhone 15', '$400', 'The latest benchmark in mobile technology.', '../images_copy/iph15-front.png', ['../images_copy/iph15-frontS.png', '../images_copy/iph15-side.png'], 'Storage:128GB;Display:6.1 inch Super Retina;Chip:A16 Bionic;Camera:48MP Dual')">Inspect</button>
-                        <button class="btn-primary" style="padding: 8px; font-size: 0.75rem; flex: 1; background: #00e5b4; color: #000;" 
-                                onclick="addToCart('iPhone 15', '$400', 'Hardware', '128GB Storage, Super Retina XDR display.', '../images_copy/iph15-front.png')">Add</button>
-                    </div>
-                </div>
+            <div class="products-container" id="dynamicProductsGrid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top:0;">
+                <p style="color: rgba(255,255,255,0.45); text-align: center; grid-column: span 3; padding: 40px 0;">Loading hardware catalog...</p>
             </div>
-
-            <!-- Card 2: Samsung S24 (Smartphones Category) -->
-            <div class="gallery-card reveal" data-category="smartphones">
-                <div class="gallery-image"><img src="../images_copy/Sam24-front.png" alt="Samsung S24"></div>
-                <div class="gallery-info">
-                    <h3>Samsung S24</h3>
-                    <p class="price">$300</p>
-                    <div style="display: flex; gap: 8px; margin-top: 10px;">
-                        <button class="btn-view" style="padding: 8px; font-size: 0.75rem; flex: 1;" 
-                                onclick="openProductSpecs('Samsung S24', '$300', 'Elevate your daily utility with generative Galaxy AI.', '../images_copy/Sam24-front.png', ['../images_copy/Sam24-C.png', '../images_copy/Sam24-C2.png'], 'Storage:256GB;Display:6.2 inch Dynamic AMOLED;Chip:Exynos 2400;Camera:50MP Triple')">Inspect</button>
-                        <button class="btn-primary" style="padding: 8px; font-size: 0.75rem; flex: 1; background: #00e5b4; color: #000;" 
-                                onclick="addToCart('Samsung S24', '$300', 'Hardware', '256GB Storage, Galaxy AI features.', '../images_copy/Sam24-front.png')">Add</button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Card 3: NVIDIA RTX 4070 (Components Category) -->
-            <div class="gallery-card reveal" data-category="components">
-                <div class="gallery-image"><img src="../images_copy/RTX4070-F.png" alt="RTX 4070"></div>
-                <div class="gallery-info">
-                    <h3>NVIDIA RTX 4070</h3>
-                    <p class="price">$599</p>
-                    <div style="display: flex; gap: 8px; margin-top: 10px;">
-                        <button class="btn-view" style="padding: 8px; font-size: 0.75rem; flex: 1;" 
-                                onclick="openProductSpecs('RTX 4070 GPU', '$599', 'High-end graphics processing unit supporting ray tracing.', '../images_copy/RTX4070-F.png', ['../images_copy/RTX4070-U.png', '../images_copy/RTX4070-B.png'], 'VRAM:12GB GDDR6X;Interface:PCI Express 4.0;Power:200W;Ports:HDMI 2.1, DisplayPort 1.4a')">Inspect</button>
-                        <button class="btn-primary" style="padding: 8px; font-size: 0.75rem; flex: 1; background: #00e5b4; color: #000;" 
-                                onclick="addToCart('RTX 4070 GPU', '$599', 'Hardware', 'NVIDIA RTX 4070 12GB graphics card.', '../images_copy/RTX4070-F.png')">Add</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 4: OnePlus 12 (Smartphones Category) -->
-            <div class="gallery-card reveal" data-category="smartphones">
-                <div class="gallery-image"><img src="../images_copy/OP12-front.png" alt="OnePlus 12"></div>
-                <div class="gallery-info">
-                    <h3>OnePlus 12</h3>
-                    <p class="price">$500</p>
-                    <div style="display: flex; gap: 8px; margin-top: 10px;">
-                        <button class="btn-view" style="padding: 8px; font-size: 0.75rem; flex: 1;" 
-                                onclick="openProductSpecs('OnePlus 12', '$500', 'Flagship smartphone with advanced camera system.', '../images_copy/OP12-front.png', ['../images_copy/OP12-S.png', '../images_copy/OP12-back.png'], 'Storage:256GB;Display:6.82 inch Fluid AMOLED;Chip:Snapdragon 8 Gen 2;Camera:50MP Triple')">Inspect</button>
-                        <button class="btn-primary" style="padding: 8px; font-size: 0.75rem; flex: 1; background: #00e5b4; color: #000;" 
-                                onclick="addToCart('OnePlus 12', '$500', 'Hardware', '256GB Storage, advanced camera system.', '../images_copy/OP12-front.png')">Add</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 5: Samsung Z Fold 5 (Smartphones Category) -->
-            <div class="gallery-card reveal" data-category="smartphones">
-                <div class="gallery-image"><img src="../images_copy/SamZF5-front.png" alt="Samsung Z Fold 5"></div>
-                <div class="gallery-info">
-                    <h3>Samsung Z Fold 5</h3>
-                    <p class="price">$200</p>
-                    <div style="display: flex; gap: 8px; margin-top: 10px;">
-                        <button class="btn-view" style="padding: 8px; font-size: 0.75rem; flex: 1;" 
-                                onclick="openProductSpecs('Samsung Z Fold 5', '$200', 'Innovative foldable smartphone with multitasking capabilities.', '../images_copy/SamZF5-front.png', ['../images_copy/SamZF5-Open.png', '../images_copy/SamZF5-back.png'], 'Storage:512GB;Display:7.6 inch Dynamic AMOLED;Chip:Snapdragon 8 Gen 2;Camera:50MP Triple')">Inspect</button>
-                        <button class="btn-primary" style="padding: 8px; font-size: 0.75rem; flex: 1; background: #00e5b4; color: #000;" 
-                                onclick="addToCart('Samsung Z Fold 5', '$200', 'Hardware', '512GB Storage, foldable display, multitasking features.', '../images_copy/SamZF5-front.png')">Add</button>
-                    </div>
-                </div>
-            </div>
-
-
-            <!-- Card 6: iPhone 14 Pro Max (Smartphones Category) -->
-            <div class="gallery-card reveal" data-category="smartphones">
-                <div class="gallery-image"><img src="../images_copy/iph14pm-front.png" alt="iPhone 14 Pro Max"></div>
-                <div class="gallery-info">
-                    <h3>iPhone 14 Pro Max</h3>
-                    <p class="price">$600</p>
-                    <div style="display: flex; gap: 8px; margin-top: 10px;">
-                        <button class="btn-view" style="padding: 8px; font-size: 0.75rem; flex: 1;" 
-                                onclick="openProductSpecs('iPhone 14 Pro Max', '$600', 'The ultimate in mobile performance and design.', '../images_copy/iph14pm-front.png', ['../images_copy/iph14pm-front1.png', '../images_copy/iph14pm-backside.png'], 'Storage:256GB;Display:6.7 inch Super Retina XDR;Chip:A15 Bionic;Camera:48MP Triple')">Inspect</button>
-                        <button class="btn-primary" style="padding: 8px; font-size: 0.75rem; flex: 1; background: #00e5b4; color: #000;" 
-                                onclick="addToCart('iPhone 14 Pro Max', '$600', 'Hardware', '256GB Storage, Super Retina XDR display, A15 Bionic chip.', '../images_copy/iph14pm-front.png')">Add</button>
-                    </div>
-                </div>
-            </div>
- 
-            <!-- Card 7: Google Pixel 8 (Smartphones Category) -->
-            <div class="gallery-card reveal" data-category="smartphones">
-                <div class="gallery-image"><img src="../images_copy/GP8-front.png" alt="Google Pixel 8"></div>
-                <div class="gallery-info">
-                    <h3>Google Pixel 8</h3>
-                    <p class="price">$300</p>
-                    <div style="display: flex; gap: 8px; margin-top: 10px;">
-                        <button class="btn-view" style="padding: 8px; font-size: 0.75rem; flex: 1;" 
-                                onclick="openProductSpecs('Google Pixel 8', '$300', 'The ultimate in mobile performance and design.', '../images_copy/GP8-front.png', ['../images_copy/GP8-C.png', '../images_copy/GP8-Back.png'], 'Storage:128GB-256GB;Display:6.2 inch Acuta Oled Display;Chip:Google Tensor G3;Camera:50MP Triple')">Inspect</button>
-                        <button class="btn-primary" style="padding: 8px; font-size: 0.75rem; flex: 1; background: #00e5b4; color: #000;" 
-                                onclick="addToCart('Google Pixel 8', '$300', 'Hardware', '128GB-256GB Storage, Actua Oled Display, Google Tensor G3.', '../images_copy/GP8-front.png')">Add</button>
-                    </div>
-                </div>
-            </div>
-            
-
-            <!-- Card 8: Samsung Galaxy S22 Ultra (Smartphones Category) -->
-            <div class="gallery-card reveal" data-category="smartphones">
-                <div class="gallery-image"><img src="../images_copy/Sam22U-front.png" alt="Samsung Galaxy S22 Ultra"></div>
-                <div class="gallery-info">
-                    <h3>Samsung Galaxy S22 Ultra</h3>
-                    <p class="price">$300</p>
-                    <div style="display: flex; gap: 8px; margin-top: 10px;">
-                        <button class="btn-view" style="padding: 8px; font-size: 0.75rem; flex: 1;" 
-                                onclick="openProductSpecs('Samsung Galaxy S22 Ultra', '$300', 'The ultimate in mobile performance and design.', '../images_copy/Sam22U-front.png', ['../images_copy/Sam22U-side.png', '../images_copy/Sam22U-base.png'], 'Storage:256GB;Display:6.8 Dynamic AMOLED;Chip:Snapdragon 8 Gen 1;Camera:48MP Triple')">Inspect</button>
-                        <button class="btn-primary" style="padding: 8px; font-size: 0.75rem; flex: 1; background: #00e5b4; color: #000;" 
-                                onclick="addToCart('Samsung Galaxy S22 Ultra', '$300', 'Hardware', '256GB Storage, Super Retina XDR display, A16 Bionic chip.', '../images_copy/Sam22U-front.png')">Add</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </section>
     </main>
 
     <footer class="trademark">
@@ -177,14 +103,11 @@
         <div class="tm-right">Designed with precision.</div>
     </footer>
 
-    <!-- Firebase SDK Libraries (Ensures database connection is online on this page) -->
+    <!-- Firebase SDK Libraries -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     
-    <!-- Your main script -->
     <script src="/Js_on/script.js"></script>
-</body>
-</html>
 </body>
 </html>

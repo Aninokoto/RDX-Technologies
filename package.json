@@ -1,0 +1,28 @@
+{
+  "name": "-rdx-project",
+  "version": "1.0.0",
+  "description": "RDX Technologies is a full-stack web application designed for a specialized electronics repair shop and refurbished hardware reseller. The platform is mission-driven, focusing on circular electronics—rescuing discarded hardware, repairing consumer electronics, and extending device lifecycles to reduce e-waste.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aninokoto/RDX-Technologies.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Aninokoto/RDX-Technologies/issues"
+  },
+  "homepage": "https://github.com/Aninokoto/RDX-Technologies#readme",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "multer": "^2.2.0",
+    "stripe": "^22.3.1"
+  }
+}

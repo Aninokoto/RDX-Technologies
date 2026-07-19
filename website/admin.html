@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merchant Portal | RDX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="/images_copy/logo.svg">
+    <style>
+        .admin-container {
+            min-height: calc(100vh - 200px);
+            padding: 140px 24px 80px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .admin-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            width: 100%;
+            border-radius: 28px;
+            padding: 50px;
+        }
+        .admin-order-card {
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 18px;
+            padding: 24px;
+            margin-bottom: 20px;
+            text-align: left;
+            animation: fadeIn 0.3s ease;
+        }
+        .admin-order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+        }
+        .admin-control-row {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr auto;
+            gap: 12px;
+            align-items: center;
+            margin-top: 15px;
+            border-top: 1px dashed rgba(255, 255, 255, 0.08);
+            padding-top: 15px;
+        }
+        .admin-filter-bar {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 35px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        /* Multiple Posting Boxes */
+        .upload-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .upload-box {
+            border: 1px dashed rgba(0, 229, 180, 0.25);
+            background: rgba(0, 229, 180, 0.01);
+            padding: 20px 10px;
+            border-radius: 12px;
+            text-align: center;
+            position: relative;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .upload-box:hover {
+            border-color: #00e5b4;
+            background: rgba(0, 229, 180, 0.03);
+        }
+        .upload-box svg {
+            width: 20px;
+            height: 20px;
+            margin-bottom: 6px;
+        }
+        .upload-box span {
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.4);
+            display: block;
+        }
+        .upload-box strong {
+            font-size: 0.68rem;
+            color: #00e5b4;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .inventory-feed-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 14px 18px;
+            border-radius: 16px;
+            gap: 15px;
+        }
+        .status-pulse {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .status-pulse.in-stock { background: #00e5b4; box-shadow: 0 0 8px #00e5b4; }
+        .status-pulse.out-of-stock { background: #ff7a00; box-shadow: 0 0 8px #ff7a00; }
+    </style>
+</head>
+<body>
+
+    <nav class="main-nav">
+        <div></div>
+        <ul class="nav-center-pill">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#story">Our Story</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="store.html">Store</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <a href="#" class="nav-signin nav-cart-btn">Cart (<span id="cart-count">0</span>)</a>
+            <a href="#" class="nav-signin" id="navProfileBtn" onclick="handleProfileNavClick(event)">Sign In</a>
+        </div>
+    </nav>
+
+    <div class="admin-container">
+        <div class="hero-glow" style="left: 10%; top: -10%;"></div>
+        <div class="admin-card reveal">
+            <div style="text-align: center; margin-bottom: 35px;">
+                <span class="plan-tag">Merchant Console</span>
+                <h2 style="font-family:'Syne', sans-serif; font-size:2.2rem; margin-top: 6px;">Manage Store Ecosystem</h2>
+                <p style="color:rgba(255,255,255,0.4); font-size:0.88rem; margin-top: 6px;">Add devices to the store catalog, manage inventories, delete products, and confirm tracking updates.</p>
+            </div>
+
+            <!-- Subsection Tab Navigation -->
+            <div style="display: flex; gap: 10px; margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 15px;">
+                <button class="filter-chip active" id="adminTabBtn-orders" onclick="switchAdminSubTab('orders')">Manage Shipments</button>
+                <button class="filter-chip" id="adminTabBtn-inventory" onclick="switchAdminSubTab('inventory')">Manage Catalog &amp; Stock</button>
+                <button class="filter-chip" id="adminTabBtn-bookings" onclick="switchAdminSubTab('bookings')">Manage Bookings &amp; Feedback</button>
+            </div>
+
+            <!-- SUB-PANEL 1: SHIPMENTS & ORDERS -->
+            <div id="adminSection-orders">
+                <!-- Offline Search & Filter Bar -->
+                <div class="admin-filter-bar">
+                    <div class="checkout-field" style="flex-grow: 1; margin-bottom: 0;">
+                        <input type="text" id="adminSearchInput" placeholder="Search by Phone #, Customer Name, Email, or Order ID..." onkeyup="displayFilteredAdminOrders()" style="font-size:0.85rem; padding:12px 18px;">
+                    </div>
+                    <div class="gallery-filters" style="margin-bottom: 0; gap: 8px;">
+                        <button class="filter-chip active" id="filterBtn-all" onclick="setAdminStatusFilter('all')">All</button>
+                        <button class="filter-chip" id="filterBtn-pending" onclick="setAdminStatusFilter('pending')">Pending Shipment</button>
+                        <button class="filter-chip" id="filterBtn-delivered" onclick="setAdminStatusFilter('delivered')">Delivered</button>
+                    </div>
+                </div>
+
+                <!-- Dynamic Admin Orders Board -->
+                <div id="adminOrdersBoard">
+                    <p style="color: rgba(255,255,255,0.45); text-align: center; padding: 40px 0;">Authenticating admin session...</p>
+                </div>
+            </div>
+
+            <!-- SUB-PANEL 2: CATALOG & INVENTORY MANAGEMENT -->
+            <div id="adminSection-inventory" style="display: none;">
+                <div style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 30px; align-items: start;">
+                    
+                    <!-- Form block to upload products -->
+                    <div class="review-block" style="padding: 25px; background: rgba(255,255,255,0.015);">
+                        <h4 style="font-family:'Syne',sans-serif; margin-bottom: 20px;">Upload New Hardware</h4>
+                        <form onsubmit="handleAdminAddProduct(event)">
+                            <div class="checkout-field">
+                                <label>Title</label>
+                                <input type="text" id="addProdTitle" placeholder="e.g. Google Pixel 8" required>
+                            </div>
+                            <div class="checkout-field-row">
+                                <div class="checkout-field">
+                                    <label>Price</label>
+                                    <input type="text" id="addProdPrice" placeholder="e.g. $300" required>
+                                </div>
+                                <div class="checkout-field">
+                                    <label>In-Stock Quantity</label>
+                                    <input type="number" id="addProdStock" placeholder="e.g. 10" required>
+                                </div>
+                            </div>
+                            <div class="checkout-field">
+                                <label>Category</label>
+                                <select id="addProdCategory" required>
+                                    <option value="smartphones">Smartphones</option>
+                                    <option value="components">Components</option>
+                                    <option value="laptops">Laptops</option>
+                                </select>
+                            </div>
+
+                            <!-- 3 Separate Posting Boxes -->
+                            <div class="checkout-field">
+                                <label>Product Images (Attach 3 separate photos)</label>
+                                <div class="upload-grid">
+                                    <div class="upload-box" id="boxMain">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="#00e5b4" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                        <strong id="labelMain">Main Photo</strong>
+                                        <span>Click to post</span>
+                                        <input type="file" id="addProdFileMain" accept="image/*" required style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; cursor:pointer;">
+                                    </div>
+                                    <div class="upload-box" id="boxAlt1">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="#00e5b4" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                        <strong id="labelAlt1">Inspect 1</strong>
+                                        <span>Click to post</span>
+                                        <input type="file" id="addProdFileAlt1" accept="image/*" required style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; cursor:pointer;">
+                                    </div>
+                                    <div class="upload-box" id="boxAlt2">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="#00e5b4" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                        <strong id="labelAlt2">Inspect 2</strong>
+                                        <span>Click to post</span>
+                                        <input type="file" id="addProdFileAlt2" accept="image/*" required style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; cursor:pointer;">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="checkout-field">
+                                <label>Short Product Pitch</label>
+                                <textarea id="addProdDesc" placeholder="Describe the device's condition and properties..." required style="height: 80px;"></textarea>
+                            </div>
+
+                            <!-- Dedicated Specification Boxes -->
+                            <div class="checkout-field" style="border-top: 1px dashed rgba(255,255,255,0.06); padding-top: 18px;">
+                                <label style="color:#00e5b4; font-weight:600;">Technical Specifications</label>
+                                <div class="checkout-field-row" style="margin-top:10px;">
+                                    <div class="checkout-field">
+                                        <label>Storage Size</label>
+                                        <input type="text" id="addProdSpecStorage" placeholder="e.g. 128GB" required>
+                                    </div>
+                                    <div class="checkout-field">
+                                        <label>Display Size</label>
+                                        <input type="text" id="addProdSpecDisplay" placeholder="e.g. 6.1 inch OLED" required>
+                                    </div>
+                                </div>
+                                <div class="checkout-field-row">
+                                    <div class="checkout-field">
+                                        <label>Processor / Chip</label>
+                                        <input type="text" id="addProdSpecChip" placeholder="e.g. A16 Bionic" required>
+                                    </div>
+                                    <div class="checkout-field">
+                                        <label>Camera System</label>
+                                        <input type="text" id="addProdSpecCamera" placeholder="e.g. 48MP Dual" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-primary" style="background: #00e5b4; color: #000; font-weight: 700; width:100%;">Add to Inventory</button>
+                        </form>
+                    </div>
+
+                    <!-- Interactive inventory listings -->
+                    <div class="review-block" style="padding: 25px; background: rgba(255,255,255,0.015);">
+                        <h4 style="font-family:'Syne',sans-serif; margin-bottom: 20px;">Current Stock Levels &amp; Actions</h4>
+                        <div id="adminInventoryGrid" style="display: flex; flex-direction: column; gap: 15px; max-height: 720px; overflow-y: auto;">
+                            <p style="color: rgba(255,255,255,0.45); text-align: center;">Loading inventory list...</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- SUB-PANEL 3: BOOKINGS & FEEDBACK MODULE (Task 6 Business-side Hub) -->
+            <div id="adminSection-bookings" style="display: none;">
+                <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 30px; align-items: start;">
+
+                    <!-- Appointment Requests list -->
+                    <div class="review-block" style="padding: 25px; background: rgba(255,255,255,0.015);">
+                        <h4 style="font-family:'Syne',sans-serif; margin-bottom: 20px; color:#fff;">Ecosystem Appointments</h4>
+                        <div id="adminAppointmentsGrid" style="display: flex; flex-direction: column; gap: 15px; max-height: 540px; overflow-y: auto;">
+                            <p style="color: rgba(255,255,255,0.45); text-align: center;">Loading diagnostic logs...</p>
+                        </div>
+                    </div>
+
+                    <!-- Customer Feedback Panel -->
+                    <div class="review-block" style="padding: 25px; background: rgba(255,255,255,0.015);">
+                        <h4 style="font-family:'Syne',sans-serif; margin-bottom: 20px; color:#fff;">Ecosystem Reviews</h4>
+                        <div id="adminFeedbackGrid" style="display: flex; flex-direction: column; gap: 15px; max-height: 540px; overflow-y: auto;">
+                            <p style="color: rgba(255,255,255,0.45); text-align: center;">Loading review logs...</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="trademark">
+        <div class="tm-left"><div class="tm-dot"></div>RDX Technologies</div>
+        <div class="tm-center">© 2025 RDX Technologies™ · All rights reserved.</div>
+        <div class="tm-right">Designed with precision.</div>
+    </footer>
+
+    <!-- Firebase SDK Libraries -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Your main script -->
+    <script src="/Js_on/script.js"></script>
+    <script>
+        // Track file names inside the 3 separate uploader boxes
+        function bindFileNameTracker(inputId, labelId) {
+            document.getElementById(inputId).addEventListener("change", (e) => {
+                const label = document.getElementById(labelId);
+                if (label && e.target.files.length > 0) {
+                    label.innerText = e.target.files[0].name.slice(0, 10) + "...";
+                    label.style.color = "#00e5b4";
+                }
+            });
+        }
+        bindFileNameTracker("addProdFileMain", "labelMain");
+        bindFileNameTracker("addProdFileAlt1", "labelAlt1");
+        bindFileNameTracker("addProdFileAlt2", "labelAlt2");
+    </script>
+</body>
+</html>

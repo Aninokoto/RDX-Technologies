@@ -17,7 +17,7 @@
     <title>Ecosystem Dashboard | RDX</title>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="style.css">
-        <!-- This line loads your logo.svg in your browser tab, but keeps it hidden on the page -->
+    <!-- This line loads your logo.svg in your browser tab, but keeps it hidden on the page -->
     <link rel="icon" type="image/svg+xml" href="/images_copy/logo.svg">
 </head>
     <style>
@@ -434,7 +434,9 @@
                 <h1 id="welcomeGreeting">Hey there.</h1>
                 <p>Your devices, plans, and impact — all in one place.</p>
             </div>
-            <div class="dash-header-actions">
+            
+            <!-- ADDED ID HERE SO JAVASCRIPT CAN APPEND THE DYNAMIC ADMIN BUTTON -->
+            <div class="dash-header-actions" id="dashHeaderActions">
                 <a href="store.html" class="btn-secondary" style="text-decoration:none;">Browse Store</a>
                 <a href="settings.html" class="btn-primary" style="text-decoration:none;">Account Settings</a>
             </div>
@@ -565,18 +567,21 @@
                 <div class="order-history-list" id="dashboardTransmissions"></div>
             </div>
 
+            <!-- REPLACED STATIC LOCK CARD WITH INTERACTIVE USPS PORTAL CARD -->
             <div class="dash-panel dash-security-card">
-                <div class="dash-security-icon">
+                <div class="dash-security-icon" style="color: #00e5b4;">
+                    <!-- Beautiful Shipping Box SVG -->
                     <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                        <circle cx="12" cy="11" r="3"/>
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                        <line x1="12" y1="22.08" x2="12" y2="12"/>
                     </svg>
                 </div>
                 <div>
-                    <h4>Vault Security</h4>
-                    <p>Your credentials and transaction history stay encrypted end to end.</p>
+                    <h4>USPS Package Portal</h4>
+                    <p>Check on hardware deliveries and device repairs directly through USPS.</p>
                 </div>
-                <a href="settings.html" class="btn-secondary" style="text-decoration:none; width: 100%; text-align: center; padding: 12px;">Manage Credentials</a>
+                <a href="tracking.html" class="btn-primary" style="text-decoration:none; width: 100%; text-align: center; padding: 12px; background:#00e5b4; color:#000;">Track Shipments</a>
             </div>
         </section>
 
@@ -641,7 +646,7 @@
 
     <!-- Firebase SDK Libraries (Easiest Cloud Setup) -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script> <!-- ADD THIS LINE -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="/Js_on/script.js"></script>
     <script>

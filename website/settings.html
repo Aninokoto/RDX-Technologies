@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -25,22 +25,18 @@
             padding: 40px;
             position: relative;
         }
-        
-        /* Simplified Overview Grid */
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 20px;
             margin-top: 25px;
         }
-
         .dashboard-hud-card {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 16px;
             padding: 24px;
         }
-
         .hud-value {
             font-family: 'Space Mono', monospace;
             font-size: 1.8rem;
@@ -48,31 +44,26 @@
             color: #fff;
             margin-top: 12px;
         }
-
         .hud-label {
             font-size: 0.72rem;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: rgba(255, 255, 255, 0.4);
         }
-
         .welcome-hero {
             border-bottom: 1px solid rgba(255, 255, 255, 0.06);
             padding-bottom: 25px;
             margin-bottom: 25px;
         }
-
         .welcome-hero h2 {
             font-family: 'Syne', sans-serif;
             font-size: 2rem;
             margin-bottom: 6px;
         }
-
         .welcome-hero p {
             color: rgba(255, 255, 255, 0.45);
             font-size: 0.9rem;
         }
-
         @media (max-width: 760px) {
             .dashboard-grid {
                 grid-template-columns: 1fr;
@@ -105,7 +96,10 @@
                 <!-- Sidebar Navigation -->
                 <aside class="account-sidebar">
                     <div class="account-sidebar-header">
-                        <div class="account-avatar" id="accountAvatarInitial">?</div>
+                        <div id="accountAvatarInitial" class="pfp-outer-frame" style="cursor: pointer; position: relative;" onclick="triggerLocalPfpUpload()">
+                            <div style="font-family:'Syne', sans-serif; font-weight:800; font-size:1.1rem; color:#00e5b4;">?</div>
+                        </div>
+                        <input type="file" id="pfpFileInput" accept="image/*" style="display: none;" onchange="handlePfpFileSelection(event)">
                         <div>
                             <h4 id="sidebarUserName">Loading...</h4>
                             <span id="sidebarUserEmail">...</span>
@@ -115,7 +109,7 @@
                         <button class="account-nav-item active" data-panel="overview" onclick="switchSettingsPanel('overview')">Overview</button>
                         <button class="account-nav-item" data-panel="subscription" onclick="switchSettingsPanel('subscription')">Ecosystem Tier</button>
                         <button class="account-nav-item" data-panel="orders" onclick="switchSettingsPanel('orders')">Order History</button>
-                        <button class="account-nav-item" data-panel="profile" onclick="switchSettingsPanel('profile')">Profile Settings</button>
+                        <button class="account-nav-item" data-panel="profile" onclick="switchSettingsPanel('profile')">Profile &amp; Security</button>
                     </nav>
                     <button class="btn-secondary account-signout-btn" onclick="logUserOut()">Sign Out</button>
                 </aside>
@@ -151,20 +145,16 @@
                         </div>
                     </div>
 
-                    <!-- Subscription Panel -->
+                    <!-- PANEL 2: CARE SUBSCRIPTIONS (Task 1 Alignments) -->
                     <div class="account-panel" id="panelSubscription">
-                        <span class="plan-tag">Subscription</span>
-                        <h2 class="account-panel-title">Ecosystem Status</h2>
-                        <div class="specs-list-grid">
-                            <div class="specs-list-item" style="grid-column: span 2;">
-                                <strong>Active Repair Tier</strong>
-                                <span id="profileTier" style="color:#00e5b4; font-weight:700;">No Active Tier</span>
-                            </div>
-                        </div>
-                        <p style="color: rgba(255,255,255,0.4); font-size: 0.85rem; margin-top: 15px;">
-                            Ecosystem tiers grant continuous premium hardware support, extended warranty horizons, priority queue setups, and support priority benefits.
+                        <span class="plan-tag">Care Plans</span>
+                        <h2 class="account-panel-title">Ecosystem Tier Plan Management</h2>
+                        <p style="color: rgba(255,255,255,0.45); font-size: 0.85rem; line-height:1.6; margin-bottom: 25px; max-width:700px;">
+                            Ecosystem tiers grant continuous premium hardware support, extended warranty horizons, priority scheduling setups, and diagnostic fee waivers.
                         </p>
-                        <a href="services.html" class="btn-primary" style="display:inline-block; text-decoration:none; margin-top:25px; padding:12px 24px;">Manage Plan</a>
+                        <div class="settings-subscription-grid" id="subscriptionTiersGrid">
+                            <!-- Injected dynamically via script.js to manage active/available dimensions -->
+                        </div>
                     </div>
 
                     <!-- PANEL 3: ORDER HISTORY -->
@@ -174,23 +164,26 @@
                         <div id="orderHistoryList" class="order-history-list"></div>
                     </div>
 
-                    <!-- PANEL 4: PROFILE SETTINGS -->
+                    <!-- PANEL 4: PROFILE & SECURITY (Task 1 Combined Modules) -->
                     <div class="account-panel" id="panelProfile">
-                        <span class="plan-tag">Settings</span>
-                        <h2 class="account-panel-title">Account Profile</h2>
-                        <div class="specs-list-grid">
-                            <div class="specs-list-item">
-                                <strong>Username</strong>
-                                <span id="profileName">Loading...</span>
-                            </div>
-                            <div class="specs-list-item">
-                                <strong>Email Address</strong>
-                                <span id="profileEmail">Loading...</span>
-                            </div>
-                        </div>
+                        <!-- Redesigned profile form injected via script.js -->
                     </div>
 
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cancellation Confirmation Screen Overlay (Task 4) -->
+    <div id="cancelSubscriptionModal" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); backdrop-filter:blur(10px); z-index:9999; align-items:center; justify-content:center; padding:20px;">
+        <div style="background:#0f0f0f; border:1px solid rgba(255,255,255,0.1); width:100%; max-width:480px; border-radius:20px; padding:30px; text-align:center;">
+            <h3 style="font-family:'Syne',sans-serif; color:#ff4d4d; font-size:1.3rem; margin-bottom:12px;">Confirm Cancellation</h3>
+            <p style="color:rgba(255,255,255,0.6); font-size:0.88rem; line-height:1.6; margin-bottom:25px;">
+                You are about to cancel your active premium care plan. All priority scheduling coverage, diagnostic waives, and warranty cycle extensions on your hardware assets will deactivate immediately.
+            </p>
+            <div style="display:flex; gap:12px;">
+                <button onclick="confirmSubscriptionPlanCancellation()" class="btn-primary" style="flex:1; background:#ff4d4d !important; color:#fff !important; font-weight:700;">Confirm Cancel</button>
+                <button onclick="closeSubscriptionCancellationModal()" class="btn-secondary" style="flex:1;">Go Back</button>
             </div>
         </div>
     </div>
@@ -201,119 +194,16 @@
         <div class="tm-right">Designed with precision.</div>
     </footer>
 
-    <!-- AI Assistant Widget -->
-    <div class="chat-widget">
-        <button class="chat-fab" id="chatFab" onclick="toggleChatWidget()" aria-label="Open chat assistant">
-            <svg class="chat-fab-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20H7L4 22V12Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                <circle cx="8.5" cy="12" r="1" fill="currentColor"/>
-                <circle cx="12" cy="12" r="1" fill="currentColor"/>
-                <circle cx="15.5" cy="12" r="1" fill="currentColor"/>
-            </svg>
-        </button>
-        <div class="chat-panel" id="chatPanel">
-            <div class="chat-panel-header">
-                <div class="chat-header-info">
-                    <div class="chat-header-avatar">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20H7L4 22V12Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <h4>RDX Assistant</h4>
-                        <span class="chat-status"><span class="chat-status-dot"></span>Products, orders &amp; support</span>
-                    </div>
-                </div>
-                <button class="chat-close-btn" onclick="toggleChatWidget()" aria-label="Close chat">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-                    </svg>
-                </button>
-            </div>
-            <div class="chat-messages" id="chatMessages">
-                <div class="chat-msg chat-msg-bot">Hey! I can explain any product in plain English, or help with orders, repairs, and general questions. What do you need?</div>
-            </div>
-            <div class="chat-input-row">
-                <input type="text" id="chatInput" placeholder="Ask me anything..." onkeydown="if(event.key==='Enter') sendChatMessage()">
-                <button class="chat-send-btn" onclick="sendChatMessage()" aria-label="Send message">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M4 12L20 4L14 20L11 13L4 12Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    
-   <!-- Firebase SDK Libraries (Ensures database connection is online on this page) -->
+    <!-- Firebase SDK Libraries -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     
-    <!-- Your main script -->
     <script src="/Js_on/script.js"></script>
-</body>
-</html>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            renderSettingsPage();
-            calculateEwasteMetric();
-            syncDashboardHUD();
+            switchSettingsPanel((window.location.hash || "").replace("#", "") || "overview");
         });
-
-        // Pulls localized data elements and outputs clean UI information
-        function syncDashboardHUD() {
-            const session = localStorage.getItem("rdx_session");
-            if (!session) return;
-            
-            const userData = JSON.parse(session);
-            const activeSubKey = "rdx_active_subscription" + getActiveUserSuffix();
-            const activeSub = localStorage.getItem(activeSubKey);
-            
-            // Welcome Title
-            const welcomeTitle = document.getElementById("welcomeUserTitle");
-            if (welcomeTitle) {
-                welcomeTitle.innerText = `Welcome, ${userData.name.split(' ')[0]}`;
-            }
-
-            // Plan Status Indicator
-            const planHud = document.getElementById("hudEcosystemPlan");
-            if (planHud) {
-                if (activeSub) {
-                    planHud.innerText = activeSub;
-                    planHud.style.color = "#00e5b4";
-                } else {
-                    planHud.innerText = "Basic Ecosystem";
-                    planHud.style.color = "rgba(255, 255, 255, 0.5)";
-                }
-            }
-        }
-
-        // Calculate hypothetical diverted e-waste volume (in KG) from order history
-        function calculateEwasteMetric() {
-            const orders = getOrderHistory();
-            let totalWeightKg = 0;
-
-            orders.forEach(order => {
-                order.items.forEach(item => {
-                    const title = item.title.toLowerCase();
-                    if (title.includes("macbook") || title.includes("laptop")) {
-                        totalWeightKg += (1.4 * item.quantity);
-                    } else if (title.includes("rtx") || title.includes("gpu") || title.includes("component")) {
-                        totalWeightKg += (1.1 * item.quantity);
-                    } else if (title.includes("iphone") || title.includes("samsung") || title.includes("phone") || title.includes("pixel")) {
-                        totalWeightKg += (0.18 * item.quantity);
-                    } else {
-                        totalWeightKg += (0.2 * item.quantity);
-                    }
-                });
-            });
-
-            const eWasteEl = document.getElementById("hudEwasteVal");
-            if (eWasteEl) {
-                eWasteEl.innerText = totalWeightKg > 0 ? `${totalWeightKg.toFixed(2)} kg` : "0.18 kg";
-            }
-        }
     </script>
 </body>
 </html>

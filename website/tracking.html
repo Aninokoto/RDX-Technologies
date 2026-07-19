@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Track Your Shipment | RDX</title>
+    <title>Track Shipments | RDX</title>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="style.css">
+    <!-- This line loads your logo.svg in your browser tab, but keeps it hidden on the page -->
     <link rel="icon" type="image/svg+xml" href="/images_copy/logo.svg">
     <style>
         .tracking-container {
@@ -20,22 +21,12 @@
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.05);
             width: 100%;
-            max-width: 600px;
+            max-width: 700px; /* Slightly wider to hold the card feed elegantly */
             border-radius: 28px;
             padding: 50px;
         }
-        /* Visual timeline styling */
-        .timeline-wrapper {
-            margin-top: 40px;
-            display: none; /* Shown dynamically via JS */
-            animation: fadeIn 0.4s ease;
-        }
-        .timeline-steps {
-            display: flex;
-            justify-content: space-between;
-            position: relative;
-            margin-bottom: 30px;
-        }
+        
+        /* Shared timeline CSS used by script.js when injecting order timelines */
         .timeline-bar {
             position: absolute;
             top: 15px;
@@ -51,7 +42,7 @@
             left: 0;
             height: 100%;
             background: #00e5b4;
-            width: 0%; /* Adjusted via JS */
+            width: 0%;
             transition: width 0.8s ease;
         }
         .timeline-step {
@@ -121,56 +112,27 @@
     <div class="tracking-container">
         <div class="hero-glow"></div>
         <div class="tracking-card reveal">
-            <h2 style="font-family:'Syne', sans-serif; font-size:2.2rem; margin-bottom:8px; text-align: center;">Track Shipment</h2>
-            <p style="color:rgba(255,255,255,0.4); font-size:0.88rem; margin-bottom:30px; text-align: center;">Enter your USPS Tracking Number or Order ID below.</p>
             
-            <div class="checkout-field" style="margin-bottom: 20px;">
-                <input type="text" id="trackingQuery" placeholder="e.g. USPS9400100000000000000000" style="text-align: center; font-family: 'Space Mono', monospace;">
-            </div>
-
-            <button class="btn-checkout-submit" onclick="findShipment()" style="width: 100%;">Locate Shipment</button>
-
-            <!-- Visual Timeline Status (Injected via JS) -->
-            <div id="timelineWrapper" class="timeline-wrapper">
-                <div class="stock-badge" style="margin: 0 auto 25px; display: flex;">
-                    <div class="stock-dot"></div>
-                    <span id="shipmentStatusText">In Transit</span>
+            <!-- This Dynamic App Container handles everything -->
+            <div id="trackingApp">
+                <h2 style="font-family:'Syne', sans-serif; font-size:2.2rem; margin-bottom:8px; text-align: center;">Track Shipment</h2>
+                <p style="color:rgba(255,255,255,0.4); font-size:0.88rem; margin-bottom:30px; text-align: center;">Enter your USPS Tracking Number or Order ID below.</p>
+                
+                <div class="checkout-field" style="margin-bottom: 20px;">
+                    <input type="text" id="trackingQuery" placeholder="e.g. 9400100000000000000000" style="text-align: center; font-family: 'Space Mono', monospace;">
                 </div>
 
-                <div class="timeline-steps">
-                    <div class="timeline-bar">
-                        <div class="timeline-progress-fill" id="timelineProgressFill"></div>
-                    </div>
-                    
-                    <div class="timeline-step" id="step1">
-                        <div class="timeline-dot">1</div>
-                        <span class="timeline-label">Processed</span>
-                    </div>
-                    <div class="timeline-step" id="step2">
-                        <div class="timeline-dot">2</div>
-                        <span class="timeline-label">Received</span>
-                    </div>
-                    <div class="timeline-step" id="step3">
-                        <div class="timeline-dot">3</div>
-                        <span class="timeline-label">In Transit</span>
-                    </div>
-                    <div class="timeline-step" id="step4">
-                        <div class="timeline-dot">4</div>
-                        <span class="timeline-label">Delivered</span>
-                    </div>
-                </div>
+                <button class="btn-checkout-submit" onclick="findShipment()" style="width: 100%;">Locate Shipment</button>
 
-                <div class="review-block" style="text-align: center; padding: 20px; background: rgba(255,255,255,0.01);">
-                    <h4 style="font-family: 'Syne', sans-serif; font-size: 0.95rem; margin-bottom: 6px;">Carrier: USPS</h4>
-                    <p style="font-size: 0.8rem; color: rgba(255,255,255,0.45); line-height: 1.5; margin-bottom: 15px;">Your package is moving within the USPS system network.</p>
-                    <a href="#" id="uspsDirectLink" target="_blank" class="btn-primary" style="display: inline-block; text-decoration: none; padding: 10px 20px; font-size: 0.8rem;">Open in USPS website</a>
+                <!-- Guest Lookup Result (Hidden by default) -->
+                <div id="timelineWrapper" style="display: none; margin-top: 40px; animation: fadeIn 0.4s ease;"></div>
+
+                <!-- Error State -->
+                <div id="trackingError" style="display: none; color: #ff7a00; font-size: 0.85rem; text-align: center; margin-top: 25px;">
+                    Unable to locate a shipment matching that tracking format.
                 </div>
             </div>
 
-            <!-- Error State -->
-            <div id="trackingError" style="display: none; color: #ff7a00; font-size: 0.85rem; text-align: center; margin-top: 25px; animation: fadeIn 0.3s ease;">
-                Unable to locate a shipment matching that tracking format.
-            </div>
         </div>
     </div>
 

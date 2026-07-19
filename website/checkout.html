@@ -6,11 +6,9 @@
     <title>Secure Checkout | RDX</title>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="style.css">
-    <!-- This line loads your logo.svg in your browser tab, but keeps it hidden on the page -->
+    <!-- This line loads your logo.svg in your browser tab -->
     <link rel="icon" type="image/svg+xml" href="/images_copy/logo.svg">
     <script src="https://js.stripe.com/v3/"></script>
-</head>
-
     <style>
         .checkout-page-container {
             min-height: calc(100vh - 200px);
@@ -126,42 +124,39 @@
                                 </div>
                             </div>
 
-                           <!-- STEP 2: PAYMENT -->
-<div class="checkout-step-panel" id="stepPanel2">
-    <h4 class="step-panel-heading">Payment Method</h4>
-    <div class="checkout-field">
-        <label for="checkoutEmail">Email Address</label>
-        <input type="email" id="checkoutEmail" required placeholder="john@example.com">
-    </div>
-    <div class="checkout-field">
-        <label for="checkoutName">Name on Card</label>
-        <input type="text" id="checkoutName" required placeholder="John Doe">
-    </div>
-    
-    <!-- Stripe Card Number Placeholder -->
-    <div class="checkout-field">
-        <label>Card Number</label>
-        <div id="stripe-card-number" class="stripe-input-container"></div>
-    </div>
-    
-    <div class="checkout-field-row">
-        <!-- Stripe Expiry Placeholder -->
-        <div class="checkout-field">
-            <label>Expiry Date</label>
-            <div id="stripe-card-expiry" class="stripe-input-container"></div>
-        </div>
-        <!-- Stripe CVC Placeholder -->
-        <div class="checkout-field">
-            <label>CVV</label>
-            <div id="stripe-card-cvc" class="stripe-input-container"></div>
-        </div>
-    </div>
+                            <!-- STEP 2: PAYMENT -->
+                            <div class="checkout-step-panel" id="stepPanel2">
+                                <h4 class="step-panel-heading">Payment Method</h4>
+                                <div class="checkout-field">
+                                    <label for="checkoutEmail">Email Address</label>
+                                    <input type="email" id="checkoutEmail" required placeholder="john@example.com">
+                                </div>
+                                <div class="checkout-field">
+                                    <label for="checkoutName">Name on Card</label>
+                                    <input type="text" id="checkoutName" required placeholder="John Doe">
+                                </div>
+                                
+                                <div class="checkout-field">
+                                    <label>Card Number</label>
+                                    <div id="stripe-card-number" class="stripe-input-container"></div>
+                                </div>
+                                
+                                <div class="checkout-field-row">
+                                    <div class="checkout-field">
+                                        <label>Expiry Date</label>
+                                        <div id="stripe-card-expiry" class="stripe-input-container"></div>
+                                    </div>
+                                    <div class="checkout-field">
+                                        <label>CVV</label>
+                                        <div id="stripe-card-cvc" class="stripe-input-container"></div>
+                                    </div>
+                                </div>
 
-    <div class="checkout-step-actions split">
-        <button type="button" class="btn-checkout-back" onclick="goToStep(1)">Back</button>
-        <button type="button" class="btn-checkout-submit" onclick="goToStep(3)">Review Order</button>
-    </div>
-</div>
+                                <div class="checkout-step-actions split">
+                                    <button type="button" class="btn-checkout-back" onclick="goToStep(1)">Back</button>
+                                    <button type="button" class="btn-checkout-submit" onclick="goToStep(3)">Review Order</button>
+                                </div>
+                            </div>
 
                             <!-- STEP 3: REVIEW -->
                             <div class="checkout-step-panel" id="stepPanel3">
@@ -222,28 +217,6 @@
         </div>
     </div>
 
-    <footer class="trademark">
-        <div class="tm-left"><div class="tm-dot"></div>RDX Technologies</div>
-        <div class="tm-center">© 2025 RDX Technologies™ · All rights reserved.</div>
-        <div class="tm-right">Designed with precision.</div>
-    </footer>
-
-
-<!-- Firebase SDK Libraries (Ensures database connection is online on this page) -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-    
-    <!-- Your main script -->
-    <script src="/Js_on/script.js"></script>
-</body>
-</html>
-    <script>
-        // Formally trigger checkout render immediately on page load
-        document.addEventListener("DOMContentLoaded", () => {
-            renderCheckoutPage();
-        });
-    </script>
     <!-- AI Assistant Widget -->
     <div class="chat-widget">
         <button class="chat-fab" id="chatFab" onclick="toggleChatWidget()" aria-label="Open chat assistant">
@@ -287,5 +260,23 @@
         </div>
     </div>
 
+    <footer class="trademark">
+        <div class="tm-left"><div class="tm-dot"></div>RDX Technologies</div>
+        <div class="tm-center">© 2025 RDX Technologies™ · All rights reserved.</div>
+        <div class="tm-right">Designed with precision.</div>
+    </footer>
+
+    <!-- Firebase SDK Libraries -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Main script -->
+    <script src="/Js_on/script.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            renderCheckoutPage();
+        });
+    </script>
 </body>
 </html>
